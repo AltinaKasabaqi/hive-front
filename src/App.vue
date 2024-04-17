@@ -1,26 +1,58 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <WorkPlace></WorkPlace>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import WorkPlace from "./components/WorkPlaceBoard/WorkPlace.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
-    HelloWorld
-  }
-}
+    WorkPlace,
+  },
+};
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+body {
+  background-color: #121212;
+  color: #fff;
+}
+
+/* to have consistency */
+@import "/src/cssReset/cssReset.css";
+
+:root {
+  --font-L: 4rem;
+  --font-M: 3rem;
+  --font-S: 1.5rem;
+}
+@media only screen and (max-width: 1600px) {
+  :root {
+    --font-L: 3.5rem;
+    --font-M: 3rem;
+    --font-S: 1.5rem;
+  }
+}
+@media only screen and (max-width: 1250px) {
+  :root {
+    --font-L: 3rem;
+    --font-M: 3rem;
+    --font-S: 1.5rem;
+  }
+}
+@media only screen and (max-width: 890px) {
+  :root {
+    --font-L: 3rem;
+    --font-M: 2.4rem;
+    --font-S: 1.3rem;
+  }
+}
+@media only screen and (max-width: 450px) {
+  :root {
+    --font-L: 2rem;
+    --font-M: 1.5rem;
+    --font-S: 1rem;
+  }
 }
 </style>
