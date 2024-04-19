@@ -13,10 +13,7 @@ the user
       <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
       <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
       <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
-      <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
-      <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
       <WorkPlaces :workplaceName="'Work Space 4'"></WorkPlaces>
-      <AddWorkPlace></AddWorkPlace>
     </div>
   </div>
 
@@ -29,16 +26,12 @@ the user
 </template>
 <script>
 import WorkPlaces from "./WorkPlaces.vue";
-import AddWorkPlace from "./AddWorkPlace";
-import SettingsWorkPlacePopup from "../popups/Settings/Settings";
+import SettingsWorkPlacePopup from "../popups/Settings/UserSetting";
 
 export default {
   name: "WorkPlace",
   components: {
     WorkPlaces,
-
-    AddWorkPlace,
-
     SettingsWorkPlacePopup,
   },
   data() {
@@ -69,7 +62,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: var(--font-M);
+    font-size: var(--font-L);
     // background-color: rgba(255, 0, 0, 0.226);
   }
   .WorkPlaces {
