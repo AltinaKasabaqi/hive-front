@@ -5,7 +5,7 @@ the user
     <div class="navBar">
       <h1>Genc</h1>
       <p>Hive</p>
-      <p>Settings</p>
+      <p @click="openSettingsPopup" class="SettingsButton">Settings</p>
     </div>
     <div class="WorkPlaces">
       <WorkPlaces :workplaceName="'Work Space 1'"></WorkPlaces>
@@ -16,15 +16,39 @@ the user
       <WorkPlaces :workplaceName="'Work Space 4'"></WorkPlaces>
     </div>
   </div>
+
+  <SettingsWorkPlacePopup
+    v-if="showSettingsPopup"
+    @close="showSettingsPopup = false"
+    :workplaceName="workplaceName"
+    :members="members"
+  />
 </template>
 <script>
 import WorkPlaces from "./WorkPlaces.vue";
+import SettingsWorkPlacePopup from "../popups/Settings/Settings";
 
 export default {
   name: "WorkPlace",
   components: {
     WorkPlaces,
+    SettingsWorkPlacePopup
   },
+  data() {
+    return {
+      showSettingsPopup: false,
+      members: [],
+    };
+  },
+  methods: {
+    openSettingsPopup() {
+      console.log("Settings clicked");
+      // Add this line inside the method
+      console.log("showSettingsPopup:", this.showSettingsPopup);
+      // Method to toggle visibility of edit popup
+      this.showSettingsPopup = !this.showSettingsPopup;
+    },
+  }
 };
 </script>
 
@@ -50,6 +74,9 @@ export default {
     flex-wrap: wrap;
     // background-color: red;
   }
+}
+.SettingsButton:hover {
+  cursor: pointer;
 }
 @media only screen and (max-width: 890px) {
   .WorkPlace {
