@@ -1,15 +1,15 @@
 <template>
-  <WorkPlace></WorkPlace>
+  <div>
+    <router-view></router-view>
+  </div>
+  
 </template>
 
 <script>
-import WorkPlace from "./components/WorkPlaceBoard/WorkPlace.vue";
 
 export default {
   name: "App",
-  components: {
-    WorkPlace,
-  },
+   
 };
 </script>
 
