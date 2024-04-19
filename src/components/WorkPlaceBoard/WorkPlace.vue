@@ -13,17 +13,22 @@ the user
       <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
       <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
       <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
+      <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
+      <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
       <WorkPlaces :workplaceName="'Work Space 4'"></WorkPlaces>
+      <AddWorkPlace></AddWorkPlace>
     </div>
   </div>
 </template>
 <script>
 import WorkPlaces from "./WorkPlaces.vue";
+import AddWorkPlace from "./AddWorkPlace";
 
 export default {
   name: "WorkPlace",
   components: {
     WorkPlaces,
+    AddWorkPlace,
   },
 };
 </script>
@@ -31,15 +36,14 @@ export default {
 <style scoped lang="scss">
 .WorkPlace {
   width: 100%;
-  .navBar,
-  .WorkPlaces {
+  .navBar {
     padding: 5rem 10rem;
   }
   .navBar {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: var(--font-L);
+    font-size: var(--font-M);
     // background-color: rgba(255, 0, 0, 0.226);
   }
   .WorkPlaces {

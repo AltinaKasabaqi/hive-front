@@ -1,16 +1,7 @@
 // this is the page to for each workspace card
 <template lang="">
-  <div class="WorkPlaceCard">
-    <h3>{{ workplaceName }}</h3>
-    <div>
-      <p @click="openEditPopup">Edit</p>
-
-      <div class="members">
-        <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
-        <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
-        <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
-      </div>
-    </div>
+  <div class="WorkPlaceCard" @click="openEditPopup">
+    <h3>+ Add WorkPlace</h3>
   </div>
 
   <EditWorkPlacePopup
@@ -25,7 +16,7 @@
 import EditWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
 
 export default {
-  name: "WorkPlace",
+  name: "AddWorkPlace",
   components: {
     EditWorkPlacePopup,
   },
@@ -59,10 +50,14 @@ export default {
   background-color: #3f3f3f65;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 3rem 10rem;
   gap: 2rem;
   border: 1px solid #fff;
   h3 {
+    text-decoration: underline;
+    color: #93d890;
     font-size: var(--font-M);
   }
   p {
