@@ -56,11 +56,12 @@ export default {
 .WorkPlace {
   width: 100%;
   .navBar {
-    padding: 5rem 10rem;
+    padding: 1.3rem 10rem;
   }
   .navBar {
     display: flex;
     align-items: center;
+    // align-items: center;
     justify-content: space-between;
     font-size: var(--font-L);
     // background-color: rgba(255, 0, 0, 0.226);

@@ -8,53 +8,37 @@
       </div>
     </div>
     <div class="Lists">
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
+      <div class="List">
+        <div class="ListName">
+          <!-- todo leaving the focus of the input to change the database -->
+          <input type="text" placeholder="Add a list" value="todo" />
+          <p>X</p>
+        </div>
+        <!-- todo make this into a another file and import it -->
+        <div class="Task">
+          <p class="Title">
+            Title of the task and this can be as long as possible
+          </p>
+          <div>
+            <div class="members">
+              <img
+                src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
+                alt=""
+              />
+              <img
+                src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
-      </div>
-      <div class="Tasks">
-        <!-- todo leaving the focus of the input to change the database -->
-        <input type="text" placeholder="Add a list" value="123" />
+
+      <div class="List ListAdd">
+        <div class="ListName">
+          <!-- todo leaving the focus of the input to change the database -->
+          <input type="text" placeholder="Add a list" />
+        </div>
       </div>
     </div>
   </div>
@@ -89,6 +73,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// todo hide the scroll bar
 .workSpaceLists {
   height: 100vh;
   display: flex;
@@ -111,20 +96,64 @@ export default {
   height: 100%;
   display: flex;
   overflow: scroll;
+  // overflow: hidden;
 }
-.Tasks {
-  min-width: 40rem;
-  padding: 3rem 4rem;
-  height: 100%;
+.List {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex;
+  max-width: 40rem;
+
+  min-height: 100%;
   background-color: #3f3f3f65;
-  border: 1px solid #fff;
-  input {
-    background: none;
-    color: #fff;
-    border: none;
-    outline: none;
-    border-bottom: 1px solid #fff;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  .Task {
+    cursor: pointer;
     width: 100%;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    .members {
+      display: flex;
+      gap: 0.6rem;
+      img {
+        background-color: rgb(51, 51, 117);
+        width: 3rem;
+        aspect-ratio: 1/1;
+        border-radius: 100%;
+      }
+    }
+  }
+  .ListName {
+    padding: 3rem 0px;
+    width: 80%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    input {
+      background: none;
+      color: #fff;
+      border: none;
+      outline: none;
+      border-bottom: 1px solid #fff;
+      width: 80%;
+    }
+  }
+}
+.ListAdd {
+  position: relative;
+  // bottom: -50%;
+  border-right: 1px solid #fff;
+  .ListName {
+    input {
+      width: 100%;
+    }
   }
 }
 </style>
