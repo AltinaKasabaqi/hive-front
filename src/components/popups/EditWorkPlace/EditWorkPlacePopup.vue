@@ -88,6 +88,12 @@ export default {
   }
 
   input {
+    transition: 0.2s;
+    border-bottom: 1px solid #00000054;
+  }
+
+  input:hover,
+  input:focus {
     border-bottom: 1px solid #000;
   }
 

@@ -3,8 +3,8 @@ the user
 <template>
   <div class="WorkPlace">
     <div class="navBar">
-      <h1>Genc</h1>
-      <p>Hive</p>
+      <h1 class="clickable">Genc</h1>
+      <p class="clickable">Hive</p>
       <p @click="openSettingsPopup" class="SettingsButton">Settings</p>
     </div>
     <div class="WorkPlaces">
@@ -75,6 +75,15 @@ export default {
     // background-color: red;
   }
 }
+// for later animation of the setings page
+// .SettingsButton::after {
+//   content: "";
+//   transition: 0.2s;
+//   width: 20%;
+//   display: block;
+//   height: 2px;
+//   background: red;
+// }
 .SettingsButton:hover {
   cursor: pointer;
 }

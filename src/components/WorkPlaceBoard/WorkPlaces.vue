@@ -1,6 +1,6 @@
 // this is the page to for each workspace card
 <template lang="">
-  <div class="WorkPlaceCard">
+  <div class="WorkPlaceCard clickable">
     <h3>{{ workplaceName }}</h3>
     <div>
       <p @click="openEditPopup">Edit</p>
@@ -53,6 +53,7 @@ export default {
 
 <style lang="scss" scoped>
 .WorkPlaceCard {
+  transition: 0.2s;
   flex: 1;
   min-width: 30%;
   // border-radius: 1.4rem;
@@ -86,6 +87,10 @@ export default {
       }
     }
   }
+}
+
+.WorkPlaceCard:hover {
+  background-color: #ffffff77;
 }
 @media only screen and (max-width: 1600px) {
   .WorkPlaceCard {

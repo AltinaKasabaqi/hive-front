@@ -70,6 +70,12 @@ export default {
   }
 
   input {
+    transition: 0.2s;
+    border-bottom: 1px solid #00000046;
+  }
+  input:hover,
+  input:focus {
+    border: none;
     border-bottom: 1px solid #000;
   }
 

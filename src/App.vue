@@ -22,6 +22,11 @@ body {
 /* to have consistency */
 @import "/src/cssReset/cssReset.css";
 
+.clickable {
+  cursor: pointer;
+
+}
+
 :root {
   --font-L: 4rem;
   --font-M: 3rem;

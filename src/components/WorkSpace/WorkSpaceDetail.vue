@@ -4,15 +4,15 @@
       <div class="topBar">
         <!-- todo take the name as a prop -->
         <h4>workSpaceName</h4>
-        <p @click="openSettingsPopup">Settings</p>
+        <p @click="openSettingsPopup" class="clickable">Settings</p>
       </div>
     </div>
     <div class="Lists">
       <div class="List">
         <div class="ListName">
-          <!-- todo leaving the focus of the input to change the database -->
-          <input type="text" placeholder="Add a list" value="todo" />
-          <p>X</p>
+          <!-- todo leaving the focus of the input to change the fdatabase -->
+          <input type="text" placeholder="Name" value="todo" />
+          <p class="clickable">X</p>
         </div>
         <!-- todo make this into a another file and import it -->
         <div class="Task">
@@ -32,12 +32,34 @@
             </div>
           </div>
         </div>
+        <div class="Task">
+          <p class="Title">
+            Title of the task and this can be as long as possible
+          </p>
+          <div>
+            <div class="members">
+              <img
+                src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
+                alt=""
+              />
+              <img
+                src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
+                alt=""
+              />
+            </div>
+          </div>
+        </div>
+        <div class="Task TaskAdd">
+          <p class="Title">
+            <input type="text" placeholder="+  Add a task" value="" />
+          </p>
+        </div>
       </div>
 
       <div class="List ListAdd">
         <div class="ListName">
           <!-- todo leaving the focus of the input to change the database -->
-          <input type="text" placeholder="Add a list" />
+          <input type="text" placeholder="+ Add a list" />
         </div>
       </div>
     </div>
@@ -109,7 +131,11 @@ export default {
   background-color: #3f3f3f65;
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
+  .Task:hover {
+    background-color: #ffffff50;
+  }
   .Task {
+    transition: 0.2s;
     cursor: pointer;
     width: 100%;
     border-top: 1px solid #fff;
@@ -136,15 +162,31 @@ export default {
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    input {
-      background: none;
-      color: #fff;
-      border: none;
-      outline: none;
-      border-bottom: 1px solid #fff;
-      width: 80%;
-    }
   }
+}
+.TaskAdd {
+  input {
+    width: 100%;
+    text-align: center;
+  }
+}
+.TaskAdd:hover {
+  input::placeholder {
+    color: #ffffffbd;
+  }
+}
+input {
+  transition: 0.2s;
+  background: none;
+  color: #fff;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid #ffffff73;
+  width: 80%;
+}
+input:hover,
+input:focus {
+  border-bottom: 1px solid #ffffff;
 }
 .ListAdd {
   position: relative;
