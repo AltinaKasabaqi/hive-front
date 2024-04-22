@@ -14,6 +14,7 @@ the user
       <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
       <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
       <WorkPlaces :workplaceName="'Work Space 4'"></WorkPlaces>
+      <AddWorkPlace />
     </div>
   </div>
 
@@ -27,12 +28,14 @@ the user
 <script>
 import WorkPlaces from "./WorkPlaces.vue";
 import SettingsWorkPlacePopup from "../popups/Settings/UserSetting";
+import AddWorkPlace from "./AddWorkPlace.vue";
 
 export default {
   name: "WorkPlace",
   components: {
     WorkPlaces,
     SettingsWorkPlacePopup,
+    AddWorkPlace,
   },
   data() {
     return {

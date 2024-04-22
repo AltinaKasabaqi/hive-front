@@ -2,12 +2,21 @@
   <div class="TaskDetailPopupContainer" @click="closePopup">
     <div class="TaskDetailPopup" @click.stop>
       <!-- todo taking the value from the objects in api -->
-      <input type="text" placeholder="Title" value="" />
-      <input type="text" placeholder="Content" value="" />
+      <input type="text" placeholder="Title" value="" class="lineInputExpand" />
+      <input
+        type="text"
+        placeholder="Content"
+        value=""
+        class="lineInputExpand"
+      />
       <!-- todo add options to select members -->
       <div class="EditWorkPlaceUpdateChanges">
-        <button class="WorkPlaceSave" @click="saveChanges">Save</button>
-        <button class="WorkPlaceDelete" @click="deleteWorkPlace">Delete</button>
+        <button class="WorkPlaceSave expandInput" @click="saveChanges">
+          Save
+        </button>
+        <button class="WorkPlaceDelete expandInput" @click="deleteWorkPlace">
+          Delete
+        </button>
       </div>
     </div>
   </div>

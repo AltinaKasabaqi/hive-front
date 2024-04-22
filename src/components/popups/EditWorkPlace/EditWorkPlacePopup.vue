@@ -10,7 +10,7 @@
       />
 
       <input type="" name="" value="" placeholder="Invite people by username" />
-      <button>Add</button>
+      <button class="expandInput">Add</button>
       <div class="EditWorkPlaceAllMembers">
         <p>Members on this workplace</p>
 
@@ -19,15 +19,14 @@
           :userProfile="''"
           :member="'chekced'"
         ></EditWorkPlaceAllMembers>
-        <EditWorkPlaceAllMembers
-          :userName="'User 2'"
-          :userProfile="''"
-          :member="false"
-        ></EditWorkPlaceAllMembers>
       </div>
       <div class="EditWorkPlaceUpdateChanges">
-        <button class="WorkPlaceSave" @click="saveChanges">Save</button>
-        <button class="WorkPlaceDelete" @click="deleteWorkPlace">Delete</button>
+        <button class="WorkPlaceSave expandInput" @click="saveChanges">
+          Save
+        </button>
+        <button class="WorkPlaceDelete expandInput" @click="deleteWorkPlace">
+          Delete
+        </button>
       </div>
     </div>
   </div>
@@ -82,19 +81,20 @@ export default {
   color: #000;
   input,
   button {
+    outline: none;
     padding: 1rem 2rem;
     border: none;
     font-size: var(--font-M);
   }
 
   input {
-    transition: 0.2s;
+    transition: 0.1s;
     border-bottom: 1px solid #00000054;
   }
 
   input:hover,
   input:focus {
-    border-bottom: 1px solid #000;
+    border-bottom: 3px solid #000;
   }
 
   .EditWorkPlacePopup {

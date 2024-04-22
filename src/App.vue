@@ -2,18 +2,15 @@
   <div>
     <router-view></router-view>
   </div>
-  
 </template>
 
 <script>
-
 export default {
   name: "App",
-   
 };
 </script>
 
-<style>
+<style lang="scss">
 body {
   background-color: #121212;
   color: #fff;
@@ -21,10 +18,35 @@ body {
 
 /* to have consistency */
 @import "/src/cssReset/cssReset.css";
+.lineInputExpand {
+  input {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #000;
+    transition: 0.1s;
+  }
+}
+
+.lineInputExpand:hover {
+  input {
+    border-bottom: 3px solid #000;
+  }
+}
+
+.expandInput {
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.expandInput:active {
+  transform: scale(0.95);
+}
+.expandInput:hover {
+  transform: scale(1.02);
+}
 
 .clickable {
   cursor: pointer;
-
 }
 
 :root {

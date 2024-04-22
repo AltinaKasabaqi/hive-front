@@ -11,7 +11,7 @@
         <label for="removeMember"> Member</label><br />
         <input type="checkbox" :checked="member" />
       </div>
-      <button id="removeMember">Remove</button>
+      <button class="removeMember expandInput">Remove</button>
     </div>
   </div>
 </template>
@@ -36,13 +36,11 @@ label {
   line-height: 0rem;
 }
 
+.EditWorkPlaceMembers:hover {
+  border-bottom: 3px solid #000;
+}
 .EditWorkPlaceMembers {
-  img {
-    background-color: rgb(51, 51, 117);
-    width: 4rem;
-    aspect-ratio: 1/1;
-    border-radius: 100%;
-  }
+  transition: 0.1s;
   padding: 1rem;
   display: flex;
   flex-direction: column;
@@ -51,6 +49,12 @@ label {
   align-items: center;
   justify-content: space-between;
 
+  img {
+    background-color: rgb(51, 51, 117);
+    width: 4rem;
+    aspect-ratio: 1/1;
+    border-radius: 100%;
+  }
   .MemberPrivilages {
     font-size: var(--font-S);
     display: flex;

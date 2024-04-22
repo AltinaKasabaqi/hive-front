@@ -12,10 +12,10 @@
         <div class="ListName">
           <!-- todo leaving the focus of the input to change the fdatabase -->
           <input type="text" placeholder="Name" value="todo" />
-          <p class="clickable">X</p>
+          <p class="clickable expandInput removeList">X</p>
         </div>
         <!-- todo make this into a another file and import it -->
-        <div class="Task" @click="openTaskDetail">
+        <div class="Task expandInput" @click="openTaskDetail">
           <p class="Title">
             Title of the task and this can be as long as possible
           </p>
@@ -108,6 +108,12 @@ export default {
   display: flex;
   overflow: scroll;
   // overflow: hidden;
+  .removeList {
+    transition: 0.1s;
+  }
+  .removeList:hover {
+    color: rgb(154, 40, 40);
+  }
 }
 .List {
   display: flex;
@@ -120,11 +126,15 @@ export default {
   background-color: #3f3f3f65;
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
+  overflow: hidden;
   .Task:hover {
     background-color: #ffffff50;
   }
+  .Task:active {
+    transform: scale(0.95);
+  }
   .Task {
-    transition: 0.2s;
+    transition: 0.1s;
     cursor: pointer;
     width: 100%;
     border-top: 1px solid #fff;

@@ -17,7 +17,7 @@
       />
 
       <input type="" name="" value="" placeholder="Enter your new Password" />
-      <button @click="confirmChanges">Confirm</button>
+      <button @click="confirmChanges" class="expandInput">Confirm</button>
     </div>
   </div>
 </template>

@@ -1,18 +1,19 @@
 // this is the page to for each workspace card
 <template lang="">
-  <div class="WorkPlaceCard clickable">
-    <h3>{{ workplaceName }}</h3>
-    <div>
-      <p @click="openEditPopup">Edit</p>
+  <div class="WorkPlaceCardContainer">
+    <div class="WorkPlaceCard clickable">
+      <h3>{{ workplaceName }}</h3>
+      <div>
+        <p @click="openEditPopup">Edit</p>
 
-      <div class="members">
-        <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
-        <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
-        <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
+        <div class="members">
+          <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
+          <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
+          <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
+        </div>
       </div>
     </div>
   </div>
-
   <EditWorkPlacePopup
     v-if="showEditPopup"
     @close="showEditPopup = false"
@@ -52,17 +53,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.WorkPlaceCard {
+.WorkPlaceCardContainer {
   transition: 0.2s;
   flex: 1;
   min-width: 30%;
+  border: 1px solid #fff;
+  overflow: hidden;
+}
+.WorkPlaceCard {
+  transition: 0.2s;
   // border-radius: 1.4rem;
   background-color: #3f3f3f65;
   display: flex;
   flex-direction: column;
   padding: 3rem 10rem;
   gap: 2rem;
-  border: 1px solid #fff;
   h3 {
     font-size: var(--font-M);
   }
@@ -89,8 +94,13 @@ export default {
   }
 }
 
-.WorkPlaceCard:hover {
+.WorkPlaceCardContainer:hover {
   background-color: #ffffff77;
+  // transform: scale(0.95);
+}
+
+.WorkPlaceCard:hover {
+  transform: scale(1.05);
 }
 @media only screen and (max-width: 1600px) {
   .WorkPlaceCard {

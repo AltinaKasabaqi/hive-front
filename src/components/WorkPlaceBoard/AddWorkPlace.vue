@@ -1,7 +1,7 @@
 // this is the page to for each workspace card
 <template lang="">
   <div class="WorkPlaceCard" @click="openEditPopup">
-    <h3>+ Add WorkPlace</h3>
+    <h3 class="clickable">+ Add WorkPlace</h3>
   </div>
 
   <EditWorkPlacePopup
