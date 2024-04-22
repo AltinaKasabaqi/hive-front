@@ -15,24 +15,7 @@
           <p class="clickable">X</p>
         </div>
         <!-- todo make this into a another file and import it -->
-        <div class="Task">
-          <p class="Title">
-            Title of the task and this can be as long as possible
-          </p>
-          <div>
-            <div class="members">
-              <img
-                src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
-                alt=""
-              />
-              <img
-                src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
-                alt=""
-              />
-            </div>
-          </div>
-        </div>
-        <div class="Task">
+        <div class="Task" @click="openTaskDetail">
           <p class="Title">
             Title of the task and this can be as long as possible
           </p>
@@ -64,7 +47,7 @@
       </div>
     </div>
   </div>
-
+  <TaskPopup v-if="showTaskDetail" @close="showTaskDetail = false" />
   <SettingsWorkPlacePopup
     v-if="showSettingsPopup"
     @close="showSettingsPopup = false"
@@ -75,20 +58,26 @@
 
 <script>
 import SettingsWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
+import TaskPopup from "../popups/TaskPopup/TaskPopup.vue";
 export default {
   name: "WorkPlaceDetail",
   components: {
     SettingsWorkPlacePopup,
+    TaskPopup,
   },
   data() {
     return {
       showSettingsPopup: false,
+      showTaskDetail: false,
       members: [],
     };
   },
   methods: {
     openSettingsPopup() {
       this.showSettingsPopup = !this.showSettingsPopup;
+    },
+    openTaskDetail() {
+      this.showTaskDetail = !this.showTaskDetail;
     },
   },
 };
@@ -195,6 +184,16 @@ input:focus {
   .ListName {
     input {
       width: 100%;
+    }
+  }
+}
+
+@media only screen and (max-width: 890px) {
+  .workSpaceLists {
+    .topBarContainer {
+      .topBar {
+        padding: 3rem 5%;
+      }
     }
   }
 }
