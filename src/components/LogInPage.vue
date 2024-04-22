@@ -1,16 +1,16 @@
 <template>
     <div class="login-container">
       <form @submit.prevent="submitForm" class="login-form">
-        <h1 class="form-title">Kyçu</h1>
+        <h1 class="form-title">LogIn</h1>
         <div class="form-group">
           <label for="email">Email:</label>
           <input type="email" id="email" v-model="formData.email" class="form-control" required>
         </div>
         <div class="form-group">
-          <label for="password">Fjalëkalimi:</label>
+          <label for="password">PassWord:</label>
           <input type="password" id="password" v-model="formData.password" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary">Kyçu</button>
+        <button type="submit" class="btn btn-primary">LogIn</button>
       </form>
     </div>
   </template>
