@@ -3,17 +3,19 @@ the user
 <template>
   <div class="WorkPlace">
     <div class="navBar">
-      <h1 class="clickable">Genc</h1>
+      <h1 class="clickable">{{ userInfo.userName }}</h1>
       <p class="clickable">Hive</p>
       <p @click="openSettingsPopup" class="SettingsButton">Settings</p>
     </div>
     <div class="WorkPlaces">
-      <WorkPlaces :workplaceName="'Work Space 1'"></WorkPlaces>
-      <WorkPlaces :workplaceName="'Work Space 2'"></WorkPlaces>
-      <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
-      <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
-      <WorkPlaces :workplaceName="'Work Space 3'"></WorkPlaces>
-      <WorkPlaces :workplaceName="'Work Space 4'"></WorkPlaces>
+      <template v-for="(workplace, index) in workplaces" :key="index">
+        <WorkPlaces 
+          :workplaceName="workplace.workplaceName"
+          :wId="workplace.wId"
+          :workplaceDescription="workplace.workplaceDescription"
+          >
+        </WorkPlaces>
+      </template>
       <AddWorkPlace />
     </div>
   </div>
@@ -29,6 +31,7 @@ the user
 import WorkPlaces from "./WorkPlaces.vue";
 import SettingsWorkPlacePopup from "../popups/Settings/UserSetting";
 import AddWorkPlace from "./AddWorkPlace.vue";
+import axios from 'axios';
 
 export default {
   name: "WorkPlace",
@@ -41,7 +44,18 @@ export default {
     return {
       showSettingsPopup: false,
       members: [],
+      workplaces: [],
+      userInfo: {
+        userName: ''
+      }
     };
+  },
+  mounted() {
+    this.fetchUserInfo();
+  },
+  created() {
+    this.fetchWorkplaces();
+    //setInterval(this.fetchWorkplaces, 5000);
   },
   methods: {
     openSettingsPopup() {
@@ -51,6 +65,66 @@ export default {
       // Method to toggle visibility of edit popup
       this.showSettingsPopup = !this.showSettingsPopup;
     },
+    async fetchWorkplaces(){
+      try {
+        //console.log('Fetching workplaces');
+        const userId = sessionStorage.getItem('userId');
+
+        if (!userId){
+          throw new Error("User does not exist!")
+        }
+
+        const url = `http://localhost:5236/workspace/user/${userId}`;
+
+        const response = await axios.get(url , {
+          headers: {
+            'Accept': '*/'
+          }
+        })
+
+        const data = response.data;
+        //console.log("Workplace Data:", data);
+
+        this.workplaces = data.map(workplace => ({
+          wId: workplace.wId,
+          workplaceName: workplace.workspaceName,
+          workplaceDescription: workplace.workspaceDescription
+        }));
+
+        //console.log("Mapped Workplaces:", this.workplaces);
+
+
+      } 
+      catch (error) {
+          console.error('Error fetching workplaces:', error.message);
+      }
+    },
+    async fetchUserInfo(){
+      try{
+        const userId = sessionStorage.getItem('userId');
+
+        if (!userId){
+            throw new Error("User does not exist!")
+          }
+
+        const url = `http://localhost:5236/users/${userId}`;
+
+        const response = await axios.get(url , {
+          headers: {
+            'Accept': '*/'
+          }
+        })
+
+        const data = response.data;
+
+        this.userInfo = {
+          userName: data.name
+        };
+      }
+      catch(error) {
+        console.error('Error fetching user info:', error.message);
+      }
+    }
   },
 };
 </script>

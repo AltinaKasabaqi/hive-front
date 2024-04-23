@@ -9,6 +9,13 @@
         placeholder="Entere your Work Place name"
       />
 
+      <input
+        type=""
+        name=""
+        :value="workplaceDescription"
+        placeholder="Entere your Work Place description"
+      />
+
       <input type="" name="" value="" placeholder="Invite people by username" />
       <button class="expandInput">Add</button>
       <div class="EditWorkPlaceAllMembers">
@@ -43,6 +50,9 @@ export default {
     workplaceName: {
       type: String,
       required: true,
+    },
+    workplaceDescription: {
+      type: String,
     },
     member: {
       type: Boolean,

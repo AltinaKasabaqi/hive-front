@@ -34,7 +34,15 @@
     axios.post('http://localhost:5236/login', this.formData)
       .then(response => {
         const token = response.data.token;
-  
+
+        const decodedToken = parseJwt(token);
+        const userId = decodedToken.nameid;
+
+        sessionStorage.setItem('userId', userId);
+
+        console.log("Decoded Token: ", decodedToken)
+        console.log("User ID:", userId);
+
         
         Cookies.set('token', token, {expires:1}); 
         console.log("Tokeni i vendosur në cookie:", token); 
@@ -47,6 +55,16 @@
   }
     }
   };
+
+  function parseJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
   </script>
   
   

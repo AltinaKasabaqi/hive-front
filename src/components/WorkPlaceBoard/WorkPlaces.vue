@@ -3,6 +3,7 @@
   <div class="WorkPlaceCardContainer">
     <div class="WorkPlaceCard clickable">
       <h3>{{ workplaceName }}</h3>
+      <p>{{ workplaceDescription }}</p>
       <div>
         <p @click="openEditPopup">Edit</p>
 
@@ -19,6 +20,7 @@
     @close="showEditPopup = false"
     :workplaceName="workplaceName"
     :members="members"
+    :workplaceDescription="workplaceDescription"
   />
 </template>
 
@@ -30,12 +32,10 @@ export default {
   components: {
     EditWorkPlacePopup,
   },
-  workplaceName: {
-    type: String,
-    required: true,
-  },
   props: {
     workplaceName: String, // Declare prop for workplace name
+    wId: Number,
+    workplaceDescription: String
   },
   data() {
     return {
