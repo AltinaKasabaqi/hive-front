@@ -16,9 +16,8 @@
   </template>
   
   <script>
-//   import axios from 'axios';
-  
-//   import Cookies from 'js-cookie';
+  import axios from 'axios';
+  import Cookies from 'js-cookie';
   
   
   export default {
@@ -30,23 +29,23 @@
         }
       };
     },
-//     methods: {
-//       submitForm() {
-//     axios.post('http://localhost:5051/login', this.formData)
-//       .then(response => {
-//         const token = response.data.token;
+    methods: {
+      submitForm() {
+    axios.post('http://localhost:5236/login', this.formData)
+      .then(response => {
+        const token = response.data.token;
   
         
-//         Cookies.set('token', token, {expires:1}); 
-//         console.log("Tokeni i vendosur në cookie:", token); 
+        Cookies.set('token', token, {expires:1}); 
+        console.log("Tokeni i vendosur në cookie:", token); 
   
-//         this.$router.push({ name: 'AdminDashboard' });
-//       })
-//       .catch(error => {
-//         console.error('Gabim në kyçje', error);
-//       });
-//   }
-//     }
+        this.$router.push({ name: 'workplace' });
+      })
+      .catch(error => {
+        console.error('Gabim në kyçje', error);
+      });
+  }
+    }
   };
   </script>
   
