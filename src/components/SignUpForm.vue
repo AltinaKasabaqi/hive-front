@@ -1,37 +1,52 @@
 <template>
-  <div>
-    <div class="container">
-      <h2 class="title">SignUp in HIVE</h2>
-      <div v-if="errorMessage" class="alert alert-danger">
+  <div class="login-container">
+    <form @submit.prevent="submitForm" class="login-form">
+      <div v-if="errorMessage" class="ErrorLoginpopup">
         {{ errorMessage }}
       </div>
-      <form @submit.prevent="submitForm" class="content">
-        <div class="left">
-          <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" id="name" v-model="formData.name" required />
-          </div>
-          <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" id="email" v-model="formData.email" required />
-          </div>
-
-          <div class="form-group">
-            <label for="password">Password:</label>
-            <input
-              type="password"
-              id="password"
-              v-model="formData.password"
-              required
-            />
-          </div>
-
-          <button type="submit expandInput">SignUp</button>
-          <p>or</p>
-          <button class="expandInput">LogIn</button>
+      <h1 class="form-title">SignUp in HIVE</h1>
+      <div class="form-group">
+        <label for="name">Name:</label>
+        <div class="lineInputExpand">
+          <input
+            type="text"
+            id="name"
+            v-model="formData.name"
+            class="form-control"
+            required
+          />
         </div>
-      </form>
-    </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <div class="lineInputExpand">
+          <input
+            type="email"
+            id="email"
+            v-model="formData.email"
+            class="form-control"
+            required
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <div class="lineInputExpand">
+          <input
+            type="password"
+            id="password"
+            v-model="formData.password"
+            class="form-control"
+            required
+          />
+        </div>
+      </div>
+      <button type="submit" class="btn btn-primary expandInput">SignUp</button>
+      <p>or</p>
+      <router-link to="/login">
+        <button type="button" class="btn btn-primary expandInput">LogIn</button>
+      </router-link>
+    </form>
   </div>
 </template>
 
@@ -75,72 +90,63 @@ export default {
 };
 </script>
 
-<style scoped lang="scss">
-.container {
-  width: 40%;
-  margin: 10% auto;
-  background: #fff;
-  color: #000;
+<style lang="scss" scoped>
+.login-container {
+  position: relative;
+  height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
-  flex-direction: column;
-  // padding: 5rem
+  align-items: center;
+  color: #000;
 }
-
-.title {
+.login-form {
+  background-color: #fff;
+  padding: 5rem;
+  min-width: 50%;
   text-align: center;
 }
 
+.form-title {
+  margin-bottom: 20px;
+}
+
 .form-group {
-  margin-bottom: 10px;
+  margin-bottom: 1rem;
 }
 
 label {
   display: block;
-  font-weight: bold;
+  margin-bottom: 0.5rem;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"],
-select {
-  width: calc(100% - 22px);
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-select {
-  width: 100%;
-}
-
-button {
-  display: block;
-  width: calc(100% - 22px);
-  padding: 8px;
-  background-color: #505050;
-  color: #fff;
+input {
+  background: none;
+  width: 97%;
+  line-height: 3;
   border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-top: 10px;
+  outline: none;
+  border-bottom: 1px solid #000;
+}
+
+.btn-primary {
+  margin: 1rem 0;
+  color: #000;
+  width: 97%;
+  background-color: rgba(0, 0, 0, 0.096);
+  border: none;
+  border-radius: 0.25rem;
+  padding: 0.75rem 1.5rem;
+  transition: all 0.3s ease;
 }
 
 button:hover {
-  background-color: #333333;
+  background-color: rgb(83, 211, 83);
 }
 
-.alert {
-  margin-bottom: 10px;
-  padding: 8px;
-  border-radius: 5px;
-}
-
-.alert-danger {
-  background-color: #f8d7da;
-  border-color: #f5c6cb;
-  color: #721c24;
+@media only screen and (max-width: 400px) {
+  .login-form {
+    padding: 2rem;
+    width: 100%;
+  }
 }
 </style>
