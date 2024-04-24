@@ -1,10 +1,10 @@
 // to add many users in the edit workplace popup we use this
 <template>
   <div class="EditWorkPlaceMembers">
-    <img
+    <!-- <img
       src="../../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
       alt="profile"
-    />
+    /> -->
     <p class="MemberUsername">user1</p>
     <div class="MemberPrivilages">
       <div>
