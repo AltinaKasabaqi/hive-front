@@ -4,7 +4,8 @@
     <h3 class="clickable">+ Add WorkPlace</h3>
   </div>
 
-  <EditWorkPlacePopup
+  <AddWorkPlacePopup
+    @updateWorkplacesPage="updateWorkplacesPage"
     v-if="showEditPopup"
     @close="showEditPopup = false"
     :workplaceName="workplaceName"
@@ -13,12 +14,12 @@
 </template>
 
 <script>
-import EditWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
+import AddWorkPlacePopup from "../popups/AddWorkPlace/AddWorkPlacePopup";
 
 export default {
   name: "AddWorkPlace",
   components: {
-    EditWorkPlacePopup,
+    AddWorkPlacePopup,
   },
   workplaceName: {
     type: String,
@@ -33,11 +34,15 @@ export default {
       members: [],
     };
   },
+  emits: ['refreshWorkplaces'],
   methods: {
     openEditPopup() {
       // Method to toggle visibility of edit popup
       this.showEditPopup = !this.showEditPopup;
     },
+    updateWorkplacesPage(){
+      this.$emit("refreshWorkplaces")
+    }
   },
 };
 </script>

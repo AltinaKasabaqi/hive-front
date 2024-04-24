@@ -44,6 +44,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
+
 export default {
   data() {
     return {
@@ -61,13 +62,7 @@ export default {
         .then((response) => {
           const token = response.data.token;
 
-          const decodedToken = parseJwt(token);
-          const userId = decodedToken.nameid;
-
-          sessionStorage.setItem("userId", userId);
-
-          console.log("Decoded Token: ", decodedToken);
-          console.log("User ID:", userId);
+          sessionStorage.setItem("token", token);
 
           Cookies.set("token", token, { expires: 1 });
           console.log("Tokeni i vendosur në cookie:", token);
@@ -81,21 +76,6 @@ export default {
     },
   },
 };
-
-function parseJwt(token) {
-  const base64Url = token.split(".")[1];
-  const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-  const jsonPayload = decodeURIComponent(
-    atob(base64)
-      .split("")
-      .map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join("")
-  );
-
-  return JSON.parse(jsonPayload);
-}
 </script>
 
 <style lang="scss" scoped>

@@ -12,7 +12,7 @@
       <input
         type=""
         name=""
-        v-model="workplaceDescriptionInput"
+        v-model="workspaceDescriptionInput"
         placeholder="Entere your Work Place description"
       />
 
@@ -28,11 +28,8 @@
         ></EditWorkPlaceAllMembers>
       </div>
       <div class="EditWorkPlaceUpdateChanges">
-        <button class="WorkPlaceSave expandInput" @click="updateWorkPlace">
+        <button class="WorkPlaceSave expandInput" @click="createWorkplace">
           Save
-        </button>
-        <button class="WorkPlaceDelete expandInput" @click="deleteWorkPlace">
-          Delete
         </button>
       </div>
     </div>
@@ -45,32 +42,27 @@ import { parseJwt } from "@/components/Utilities/jwtUtils";
 import axios from 'axios';
 
 export default {
-  name: "EditWorkPlacePopup",
+  name: "AddWorkPlacePopup",
+  data() {
+    return {
+      workplaceNameInput: this.workplaceName || '', 
+      workspaceDescriptionInput: this.workplaceDescription || '',
+      };
+  },
   components: {
     EditWorkPlaceAllMembers,
   },
   props: {
     workplaceName: {
       type: String,
-      required: true,
     },
     workplaceDescription: {
       type: String,
-    },
-    wId: {
-      type: Number,
-      required: true,
     },
     member: {
       type: Boolean,
       default: false,
     },
-  },
-  data() {
-    return {
-      workplaceNameInput: this.workplaceName,
-      workplaceDescriptionInput: this.workplaceDescription,
-    }
   },
   methods: {
     closePopup(event) {
@@ -78,65 +70,39 @@ export default {
         this.$emit("close");
       }
     },
-    async updateWorkPlace() {
+    async createWorkplace() {
       try {
-        const url = `http://localhost:5236/workspace/${this.wId}`;
         const token = sessionStorage.getItem('token');
         const decodedToken = parseJwt(token);
         const userId = decodedToken.nameid;
-        const wId = this.wId;
+        const url = `http://localhost:5236/workspace`;
 
-        const response = await axios.put(url, {
-          wId: wId,
+        const response = await axios.post(url, {
           userId: userId || 0,
           workspaceName: this.workplaceNameInput,
-          workspaceDescription: this.workplaceDescriptionInput,
+          workspaceDescription: this.workspaceDescriptionInput,
           user: {
             userId: userId || 0,
             email: ''
           }
-        }, 
-        {
+        }, {
           headers: {
             'Accept': '*/'
           }
         });
 
         if (response.status === 200) {
-          //console.log('Deleting workplace...');
           this.$emit("close");
           this.$emit("updateWorkplacesPage");
-        } else {
-          const responseData = response.data;
-          throw new Error(responseData.message || 'Failed to delete workplace');
         }
-      } 
-      catch (error) {
-        console.error('Error creating workplace:', error.message);
-      }
-    },
-    async deleteWorkPlace() {
-      try {
-        const url = `http://localhost:5236/workspace/${this.wId}`;
-
-        const response = await axios.delete(url, {
-          headers: {
-            'Accept': '*/'
-          }
-        });
-
-        if (response.status === 200) {
-          //console.log('Deleting workplace...');
-          this.$emit("close");
-          this.$emit("updateWorkplacesPage");
-        } else {
-          const responseData = response.data;
-          throw new Error(responseData.message || 'Failed to delete workplace');
+        else {
+          throw new Error(response.data.message || 'Failed to create workplace');
         }
-      } 
-      catch (error) {
+        
+        } 
+        catch (error) {
         console.error('Error creating workplace:', error.message);
-      }
+        }
     },
   },
 };

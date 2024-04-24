@@ -16,11 +16,13 @@
     </div>
   </div>
   <EditWorkPlacePopup
+    @updateWorkplacesPage="updateWorkplacesPage"
     v-if="showEditPopup"
     @close="showEditPopup = false"
     :workplaceName="workplaceName"
     :members="members"
     :workplaceDescription="workplaceDescription"
+    :wId="wId"
   />
 </template>
 
@@ -43,11 +45,15 @@ export default {
       members: [],
     };
   },
+  emits: ['refreshWorkplaces'],
   methods: {
     openEditPopup() {
       // Method to toggle visibility of edit popup
       this.showEditPopup = !this.showEditPopup;
     },
+    updateWorkplacesPage() {
+      this.$emit('refreshWorkplaces');
+    }
   },
 };
 </script>

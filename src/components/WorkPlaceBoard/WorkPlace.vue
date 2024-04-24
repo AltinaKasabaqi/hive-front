@@ -13,10 +13,13 @@ the user
           :workplaceName="workplace.workplaceName"
           :wId="workplace.wId"
           :workplaceDescription="workplace.workplaceDescription"
+          @refreshWorkplaces="fetchWorkplaces"
           >
         </WorkPlaces>
       </template>
-      <AddWorkPlace />
+      <AddWorkPlace 
+        @refreshWorkplaces="fetchWorkplaces"
+      />
     </div>
   </div>
 
@@ -31,6 +34,7 @@ the user
 import WorkPlaces from "./WorkPlaces.vue";
 import SettingsWorkPlacePopup from "../popups/Settings/UserSetting";
 import AddWorkPlace from "./AddWorkPlace.vue";
+import { parseJwt } from "@/components/Utilities/jwtUtils";
 import axios from 'axios';
 
 export default {
@@ -39,6 +43,7 @@ export default {
     WorkPlaces,
     SettingsWorkPlacePopup,
     AddWorkPlace,
+    
   },
   data() {
     return {
@@ -59,7 +64,7 @@ export default {
   },
   methods: {
     openSettingsPopup() {
-      console.log("Settings clicked");
+      //console.log("Settings clicked");
       // Add this line inside the method
       console.log("showSettingsPopup:", this.showSettingsPopup);
       // Method to toggle visibility of edit popup
@@ -68,7 +73,11 @@ export default {
     async fetchWorkplaces(){
       try {
         //console.log('Fetching workplaces');
-        const userId = sessionStorage.getItem('userId');
+        const token = sessionStorage.getItem('token');
+
+        const decodedToken = parseJwt(token);
+        const userId = decodedToken.nameid;
+
 
         if (!userId){
           throw new Error("User does not exist!")
@@ -101,7 +110,10 @@ export default {
     },
     async fetchUserInfo(){
       try{
-        const userId = sessionStorage.getItem('userId');
+        const token = sessionStorage.getItem('token');
+
+        const decodedToken = parseJwt(token);
+        const userId = decodedToken.nameid;
 
         if (!userId){
             throw new Error("User does not exist!")
@@ -124,6 +136,9 @@ export default {
       catch(error) {
         console.error('Error fetching user info:', error.message);
       }
+    },
+    conTest(){
+      console.log("logfrom workplace.vue")
     }
   },
 };
