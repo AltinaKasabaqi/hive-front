@@ -34,15 +34,15 @@ export default {
       members: [],
     };
   },
-  emits: ['refreshWorkplaces'],
+  emits: ["refreshWorkplaces"],
   methods: {
     openEditPopup() {
       // Method to toggle visibility of edit popup
       this.showEditPopup = !this.showEditPopup;
     },
-    updateWorkplacesPage(){
-      this.$emit("refreshWorkplaces")
-    }
+    updateWorkplacesPage() {
+      this.$emit("refreshWorkplaces");
+    },
   },
 };
 </script>
