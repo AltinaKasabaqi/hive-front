@@ -7,18 +7,30 @@ const routes = [
     name: "homepage",
     component: () => import("../components/Homepage.vue"),
     meta: { requiresAuth: false}
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 294d80893857cc082e955e1e51eb7696b9833a51
   },
   {
     path: "/workplace",
     name: "workplace",
     component: () => import("../components/WorkPlaceBoard/WorkPlace.vue"),
+<<<<<<< HEAD
     meta: { requiresAuth: false}
+=======
+    meta: { requiresAuth: true}
+>>>>>>> 294d80893857cc082e955e1e51eb7696b9833a51
   },
   {
     path: "/workplace/detail/:wId",
     name: "workplaceDetail",
     component: () => import("../components/WorkSpace/WorkSpaceDetail.vue"),
+<<<<<<< HEAD
     meta: { requiresAuth: false}
+=======
+    meta: { requiresAuth: true }
+>>>>>>> 294d80893857cc082e955e1e51eb7696b9833a51
   },
   {
     path: "/login",

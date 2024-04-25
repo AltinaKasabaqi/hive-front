@@ -71,6 +71,7 @@ export default {
     return {
       workplaceNameInput: this.workplaceName,
       workplaceDescriptionInput: this.workplaceDescription,
+      
     }
   },
   methods: {
@@ -120,7 +121,6 @@ export default {
     async deleteWorkPlace() {
       try {
         const url = `http://localhost:5236/workspace/${this.wId}`;
-        const token = Cookies.get('token');
 
         const response = await axios.delete(url, {
           headers: {
