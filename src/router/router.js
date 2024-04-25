@@ -7,19 +7,18 @@ const routes = [
     name: "homepage",
     component: () => import("../components/Homepage.vue"),
     meta: { requiresAuth: false}
-    
   },
   {
     path: "/workplace",
     name: "workplace",
     component: () => import("../components/WorkPlaceBoard/WorkPlace.vue"),
-    meta: { requiresAuth: true}
+    meta: { requiresAuth: false}
   },
   {
-    path: "/workplace/detail",
+    path: "/workplace/detail/:wId",
     name: "workplaceDetail",
     component: () => import("../components/WorkSpace/WorkSpaceDetail.vue"),
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: false}
   },
   {
     path: "/login",
