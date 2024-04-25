@@ -87,7 +87,8 @@ export default {
           }
         }, {
           headers: {
-            'Accept': '*/'
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json' 
           }
         });
 

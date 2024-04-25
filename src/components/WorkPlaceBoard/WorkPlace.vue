@@ -87,7 +87,9 @@ export default {
 
         const response = await axios.get(url , {
           headers: {
-            'Accept': '*/'
+            
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json' 
           }
         })
 
