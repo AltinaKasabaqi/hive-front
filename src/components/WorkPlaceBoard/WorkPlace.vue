@@ -7,6 +7,7 @@ the user
       <p class="clickable">Hive</p>
       <p @click="openSettingsPopup" class="SettingsButton">Settings</p>
       <button id="logoutButton" @click="logout">Çkyçu</button>
+
     </div>
     <div class="WorkPlaces">
       <template v-for="(workplace, index) in workplaces" :key="index">
@@ -75,7 +76,7 @@ export default {
     },
     async fetchWorkplaces(){
       try {
-        //console.log('Fetching workplaces');
+        console.log('Fetching workplaces');
         const token = Cookies.get('token');
 
         const decodedToken = parseJwt(token);
@@ -94,6 +95,7 @@ export default {
             'Accept': 'application/json' 
           }
         })
+        
 
         const data = response.data;
         //console.log("Workplace Data:", data);
@@ -109,7 +111,11 @@ export default {
 
       } 
       catch (error) {
+        if (error.response.status === 404) {
+          this.workplaces = [];
+        } else {
           console.error('Error fetching workplaces:', error.message);
+        }
       }
     },
     async fetchUserInfo(){

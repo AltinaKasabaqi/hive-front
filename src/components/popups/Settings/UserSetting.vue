@@ -5,14 +5,14 @@
       <input
         type=""
         name=""
-        :value="userName"
+        v-model="userNameInput"
         placeholder="Enter your new user name"
       />
 
       <input
         type=""
         name=""
-        :value="userEmail"
+        v-model="userEmailInput"
         placeholder="Enter your new Email"
       />
 
@@ -23,6 +23,10 @@
 </template>
 
 <script>
+import { parseJwt } from "@/components/Utilities/jwtUtils";
+import Cookies from 'js-cookie';
+import axios from 'axios';
+
 export default {
   name: "SettingsWorkPlacePopup",
   components: {},
@@ -36,6 +40,14 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      userNameInput: this.userName,
+    }
+  },
+  created() {
+    this.fetchUserInfo();
+  },
   methods: {
     closePopup(event) {
       if (event.target.classList.contains("SettingsWorkPlaceContainer")) {
@@ -45,6 +57,36 @@ export default {
     confirmChanges() {
       // TODO Implement confirmChanges changes logic here
       this.$emit("close");
+    },
+    async fetchUserInfo(){
+      try{
+        const token = Cookies.get('token');
+
+        const decodedToken = parseJwt(token);
+        const userId = decodedToken.nameid;
+
+        if (!userId){
+            throw new Error("User does not exist!")
+          }
+
+        const url = `http://localhost:5236/users/${userId}`;
+
+        const response = await axios.get(url , {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json' 
+          }
+        })
+
+        const data = response.data;
+
+        this.userNameInput = data.name;
+        this.userEmailInput = data.email;
+
+      }
+      catch(error) {
+        console.error('Error fetching user info:', error.message);
+      }
     },
   },
 };

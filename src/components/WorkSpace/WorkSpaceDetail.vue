@@ -30,9 +30,7 @@
             <input type="text" placeholder="+  Add a task" value="" />
           </p>
         </div>
-
       </div>
-
       <div class="List ListAdd">
         <div class="ListName">
           <input type="text" placeholder="+ Add a list" v-model="listInput" @blur="addList(listInput)"/>
@@ -100,7 +98,11 @@ export default {
         this.lists = data;
 
       } catch (error) {
-        console.error('Error fetching lists:', error);
+        if (error.response.status === 404) {
+          this.lists = [];
+        } else {
+          console.error('Error fetching lists:', error.message);
+        }
       }
     },
     async fetchWorkplaceName() {
