@@ -70,6 +70,7 @@ export default {
     return {
       workplaceNameInput: this.workplaceName,
       workplaceDescriptionInput: this.workplaceDescription,
+      
     }
   },
   methods: {
@@ -119,10 +120,15 @@ export default {
     async deleteWorkPlace() {
       try {
         const url = `http://localhost:5236/workspace/${this.wId}`;
+        const token = sessionStorage.getItem('token');
+        // const decodedToken = parseJwt(token);
+        // const userId = decodedToken.nameid;
+        
 
         const response = await axios.delete(url, {
           headers: {
-            'Accept': '*/'
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json' 
           }
         });
 
