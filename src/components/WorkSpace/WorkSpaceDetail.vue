@@ -3,16 +3,15 @@
     <div class="topBarContainer">
       <div class="topBar">
         <!-- todo take the name as a prop -->
-        <h4>workSpaceName</h4>
+        <h4>{{ localWorkspaceName }}</h4>
         <p @click="openSettingsPopup" class="clickable">Settings</p>
       </div>
     </div>
     <div class="Lists">
-      <div class="List">
+      <div class="List" v-for="list in lists" :key="list.listId">
         <div class="ListName">
-          <!-- todo leaving the focus of the input to change the fdatabase -->
-          <input type="text" placeholder="Name" value="todo" />
-          <p class="clickable expandInput removeList">X</p>
+          <input type="text" v-model="list.listName" @blur="updateListName(list)" />
+          <p class="clickable expandInput removeList" @click="deleteList(list)">X</p>
         </div>
         <!-- todo make this into a another file and import it -->
         <div class="Task expandInput" @click="openTaskDetail">
@@ -21,28 +20,22 @@
           </p>
           <div>
             <div class="members">
-              <img
-                src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
-                alt=""
-              />
-              <img
-                src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg"
-                alt=""
-              />
             </div>
           </div>
         </div>
+
+
         <div class="Task TaskAdd">
           <p class="Title">
             <input type="text" placeholder="+  Add a task" value="" />
           </p>
         </div>
+
       </div>
 
       <div class="List ListAdd">
         <div class="ListName">
-          <!-- todo leaving the focus of the input to change the database -->
-          <input type="text" placeholder="+ Add a list" />
+          <input type="text" placeholder="+ Add a list" v-model="listInput" @blur="addList(listInput)"/>
         </div>
       </div>
     </div>
@@ -59,18 +52,31 @@
 <script>
 import SettingsWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
 import TaskPopup from "../popups/TaskPopup/TaskPopup.vue";
+import Cookies from 'js-cookie';
+import axios from 'axios';
+
 export default {
   name: "WorkPlaceDetail",
   components: {
     SettingsWorkPlacePopup,
     TaskPopup,
   },
+  props: {
+    workspaceName: String,
+  },
   data() {
     return {
       showSettingsPopup: false,
       showTaskDetail: false,
       members: [],
+      lists: [],
+      localWorkspaceName: '',
+      listInput: ''
     };
+  },
+  created() {
+    this.fetchLists();
+    this.fetchWorkplaceName();
   },
   methods: {
     openSettingsPopup() {
@@ -79,6 +85,123 @@ export default {
     openTaskDetail() {
       this.showTaskDetail = !this.showTaskDetail;
     },
+    async fetchLists() {
+      try {
+        const token = Cookies.get('token');
+        const wId = this.$route.params.wId;
+        const response = await axios.get(`http://localhost:5236/list/workspace/${wId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+          }
+        });
+        const data = response.data;
+        console.log(data);
+        this.lists = data;
+
+      } catch (error) {
+        console.error('Error fetching lists:', error);
+      }
+    },
+    async fetchWorkplaceName() {
+      try {
+        const token = Cookies.get('token');
+        const wId = this.$route.params.wId;
+        const response = await axios.get(`http://localhost:5236/workspace/${wId}`, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+          }
+        });
+        const data = response.data;
+
+        this.localWorkspaceName = data.workspaceName;
+
+      } catch (error) {
+        console.error('Error fetching workspace name:', error);
+      }
+    },
+    async updateListName(list) {
+      try {
+        const token = Cookies.get('token');
+        const response = await axios.put(`http://localhost:5236/list/${list.listId}`, {
+          listId: list.listId,
+          listName: list.listName,
+          workSpace: {
+            user: {
+              email: ''
+            }
+          }
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.status === 204) {
+          console.log('List name updated successfully');
+        } else {
+          console.error('Failed to update list name');
+        }
+      } catch (error) {
+        console.error('Error updating list name:', error);
+      }
+    },
+    async addList(listInput) {
+      try {
+        const wId = this.$route.params.wId;
+        const token = Cookies.get('token');
+        const response = await axios.post(`http://localhost:5236/list`, {
+          listId: '0',
+          listName: listInput,
+          workSpaceId: wId,
+          workSpace: {
+            user: {
+              email: ''
+            }
+          }
+        }, {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.status === 201) {
+          this.listInput = '';
+          this.fetchLists();
+          console.log('List added successfully');
+        } else {
+          console.error('Failed to added list');
+        }
+      } catch (error) {
+        console.error('Error adding list: ', error);
+      }
+    },
+    async deleteList(list) {
+      try {
+        const token = Cookies.get('token');
+        const response = await axios.delete(`http://localhost:5236/list/${list.listId}`,  {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (response.status === 204) {
+          this.fetchLists();
+          console.log('List deleted successfully');
+        } else {
+          console.error('Failed to deleted list');
+        }
+      } catch (error) {
+        console.error('Error deleteing list: ', error);
+      }
+    }
   },
 };
 </script>
@@ -110,6 +233,7 @@ export default {
   // overflow: hidden;
   .removeList {
     transition: 0.1s;
+    
   }
   .removeList:hover {
     color: rgb(154, 40, 40);
@@ -120,7 +244,8 @@ export default {
   align-items: center;
   flex-direction: column;
   justify-content: flex;
-  max-width: 40rem;
+  max-width: 80rem;
+  width: 20%;
 
   min-height: 100%;
   background-color: #3f3f3f65;
@@ -163,6 +288,7 @@ export default {
     justify-content: space-between;
   }
 }
+
 .TaskAdd {
   input {
     width: 100%;

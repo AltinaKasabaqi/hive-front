@@ -62,8 +62,6 @@ export default {
         .then((response) => {
           const token = response.data.token;
 
-          sessionStorage.setItem("token", token);
-
           Cookies.set("token", token, { expires: 1 });
           console.log("Tokeni i vendosur në cookie:", token);
 

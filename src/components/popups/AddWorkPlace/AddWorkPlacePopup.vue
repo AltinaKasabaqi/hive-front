@@ -39,6 +39,7 @@
 <script>
 import EditWorkPlaceAllMembers from "../Members/EditWorkPlaceMembers";
 import { parseJwt } from "@/components/Utilities/jwtUtils";
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
 export default {
@@ -72,7 +73,7 @@ export default {
     },
     async createWorkplace() {
       try {
-        const token = sessionStorage.getItem('token');
+        const token = Cookies.get('token');
         const decodedToken = parseJwt(token);
         const userId = decodedToken.nameid;
         const url = `http://localhost:5236/workspace`;
@@ -87,7 +88,8 @@ export default {
           }
         }, {
           headers: {
-            'Accept': '*/'
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json' 
           }
         });
 

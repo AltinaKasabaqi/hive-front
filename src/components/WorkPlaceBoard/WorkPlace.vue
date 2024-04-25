@@ -9,13 +9,13 @@ the user
     </div>
     <div class="WorkPlaces">
       <template v-for="(workplace, index) in workplaces" :key="index">
-        <WorkPlaces 
-          :workplaceName="workplace.workplaceName"
-          :wId="workplace.wId"
-          :workplaceDescription="workplace.workplaceDescription"
-          @refreshWorkplaces="fetchWorkplaces"
+          <WorkPlaces 
+            :workplaceName="workplace.workplaceName"
+            :wId="workplace.wId"
+            :workplaceDescription="workplace.workplaceDescription"
+            @refreshWorkplaces="fetchWorkplaces"
           >
-        </WorkPlaces>
+          </WorkPlaces>
       </template>
       <AddWorkPlace 
         @refreshWorkplaces="fetchWorkplaces"
@@ -35,6 +35,7 @@ import WorkPlaces from "./WorkPlaces.vue";
 import SettingsWorkPlacePopup from "../popups/Settings/UserSetting";
 import AddWorkPlace from "./AddWorkPlace.vue";
 import { parseJwt } from "@/components/Utilities/jwtUtils";
+import Cookies from 'js-cookie';
 import axios from 'axios';
 
 export default {
@@ -73,7 +74,7 @@ export default {
     async fetchWorkplaces(){
       try {
         //console.log('Fetching workplaces');
-        const token = sessionStorage.getItem('token');
+        const token = Cookies.get('token');
 
         const decodedToken = parseJwt(token);
         const userId = decodedToken.nameid;
@@ -87,7 +88,8 @@ export default {
 
         const response = await axios.get(url , {
           headers: {
-            'Accept': '*/'
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json' 
           }
         })
 
@@ -110,7 +112,7 @@ export default {
     },
     async fetchUserInfo(){
       try{
-        const token = sessionStorage.getItem('token');
+        const token = Cookies.get('token');
 
         const decodedToken = parseJwt(token);
         const userId = decodedToken.nameid;
@@ -123,7 +125,8 @@ export default {
 
         const response = await axios.get(url , {
           headers: {
-            'Accept': '*/'
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json' 
           }
         })
 
@@ -145,6 +148,8 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+
 .WorkPlace {
   width: 100%;
   .navBar {
@@ -161,10 +166,15 @@ export default {
   .WorkPlaces {
     padding-top: 0rem;
     display: flex;
-    align-content: start;
     // gap: 2rem;
     flex-wrap: wrap;
     // background-color: red;
+  }
+  .WorkPlaces a {
+    text-decoration: none;
+    color: inherit;
+    width: calc(25%);
+    margin-bottom: 2rem;
   }
 }
 // for later animation of the setings page
@@ -179,13 +189,26 @@ export default {
 .SettingsButton:hover {
   cursor: pointer;
 }
-@media only screen and (max-width: 890px) {
+@media only screen and (max-width: 1024px) {
   .WorkPlace {
     min-width: 100%;
     .navBar,
     .WorkPlace {
+      min-width: 100%;
       padding: 3rem 5%;
     }
+    .WorkPlaces a {
+    width: calc(50%);
+    }
   }
+
+}
+@media only screen and (max-width: 480px) {
+  .WorkPlace{
+    .WorkPlaces a {
+      width: calc(100%);
+    }
+  }
+
 }
 </style>

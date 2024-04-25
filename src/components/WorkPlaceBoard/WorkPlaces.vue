@@ -1,30 +1,31 @@
 // this is the page to for each workspace card
-<template lang="">
+<template>
   <div class="WorkPlaceCardContainer">
-    <div class="WorkPlaceCard clickable">
-      <h3>{{ workplaceName }}</h3>
-      <p>{{ workplaceDescription }}</p>
-      <div>
-        <p @click="openEditPopup">Edit</p>
+    <router-link :to="{ name: 'workplaceDetail', params: { wId: wId }, props: { wId: wId } }" class="router-link-custom">
+      <div class="WorkPlaceCard clickable">
+        <h3>{{ workplaceName }}</h3>
+        <p>{{ workplaceDescription }}</p>
+        <div>
+          <p @click.prevent.stop="openEditPopup">Edit</p>
 
-        <div class="members">
-          <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
-          <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
-          <img src="../assets/546b2d4e9bddbcb894fa8e416739339b.jpg" alt="" />
+          <div class="members">
+            <!-- Member images -->
+          </div>
         </div>
       </div>
-    </div>
+    </router-link>
+    <EditWorkPlacePopup
+      @updateWorkplacesPage="updateWorkplacesPage"
+      v-if="showEditPopup"
+      @close="showEditPopup = false"
+      :workplaceName="workplaceName"
+      :members="members"
+      :workplaceDescription="workplaceDescription"
+      :wId="wId"
+    />
   </div>
-  <EditWorkPlacePopup
-    @updateWorkplacesPage="updateWorkplacesPage"
-    v-if="showEditPopup"
-    @close="showEditPopup = false"
-    :workplaceName="workplaceName"
-    :members="members"
-    :workplaceDescription="workplaceDescription"
-    :wId="wId"
-  />
 </template>
+
 
 <script>
 import EditWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
@@ -59,13 +60,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.router-link-custom {
+  text-decoration: none; 
+  color: inherit; 
+  width: calc(25%);
+  margin-bottom: 2rem;
+}
+
 .WorkPlaceCardContainer {
   transition: 0.2s;
   flex: 1;
-  min-width: 30%;
+  min-width: 25%;
   border: 1px solid #fff;
   overflow: hidden;
 }
+
 .WorkPlaceCard {
   transition: 0.2s;
   // border-radius: 1.4rem;
@@ -117,11 +126,19 @@ export default {
   .WorkPlaceCard {
     min-width: 40%;
   }
+  .WorkPlaceCardContainer {
+    min-width: 50%;
+  }
 }
 @media only screen and (max-width: 900px) {
   .WorkPlaceCard {
     min-width: 100%;
     padding: 3rem 5rem;
+  }
+}
+@media only screen and (max-width: 480px) {
+  .WorkPlaceCardContainer {
+    min-width: 100%;
   }
 }
 </style>
