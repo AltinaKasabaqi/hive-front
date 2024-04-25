@@ -38,7 +38,7 @@ import AddWorkPlace from "./AddWorkPlace.vue";
 import { parseJwt } from "@/components/Utilities/jwtUtils";
 import Cookies from 'js-cookie';
 import axios from 'axios';
-import Cookies from 'js-cookie';
+
 
 export default {
   name: "WorkPlace",
