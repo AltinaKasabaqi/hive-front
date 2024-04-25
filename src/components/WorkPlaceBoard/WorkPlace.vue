@@ -6,6 +6,7 @@ the user
       <h1 class="clickable">{{ userInfo.userName }}</h1>
       <p class="clickable">Hive</p>
       <p @click="openSettingsPopup" class="SettingsButton">Settings</p>
+      <button id="logoutButton" @click="logout">Çkyçu</button>
     </div>
     <div class="WorkPlaces">
       <template v-for="(workplace, index) in workplaces" :key="index">
@@ -36,6 +37,7 @@ import SettingsWorkPlacePopup from "../popups/Settings/UserSetting";
 import AddWorkPlace from "./AddWorkPlace.vue";
 import { parseJwt } from "@/components/Utilities/jwtUtils";
 import axios from 'axios';
+import Cookies from 'js-cookie';
 
 export default {
   name: "WorkPlace",
@@ -140,6 +142,10 @@ export default {
         console.error('Error fetching user info:', error.message);
       }
     },
+    logout() {
+      Cookies.remove('token');
+      this.$router.push('/login');
+    },
     conTest(){
       console.log("logfrom workplace.vue")
     }
@@ -181,6 +187,11 @@ export default {
 // }
 .SettingsButton:hover {
   cursor: pointer;
+}
+#logoutButton{
+  border: solid 1px gray;
+  color: white;
+  background-color: rgb(41, 41, 41);
 }
 @media only screen and (max-width: 890px) {
   .WorkPlace {
