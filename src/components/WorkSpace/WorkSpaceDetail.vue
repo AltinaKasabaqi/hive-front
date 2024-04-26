@@ -8,14 +8,14 @@
       </div>
     </div>
     <div class="Lists">
-      <WorkPlaceLists
+      <!-- <WorkPlaceLists
         v-for="list in lists"
         :key="list.listId"
         :name="list.ListName"
-      >
-        <!-- <Tasks></Tasks> -->
+      > 
+        <Tasks></Tasks>
       </WorkPlaceLists>
-
+-->
       <div class="List ListAdd">
         <div class="ListName">
           <input
@@ -39,7 +39,7 @@
 
 <script>
 import SettingsWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
-import WorkPlaceLists from "./Lists/Lists";
+// import WorkPlaceLists from "./Lists/Lists";
 import TaskPopup from "../popups/TaskPopup/TaskPopup.vue";
 // import Tasks from "./Tasks/Tasks";
 import Cookies from "js-cookie";
@@ -51,7 +51,7 @@ export default {
     SettingsWorkPlacePopup,
     TaskPopup,
     // Tasks,
-    WorkPlaceLists,
+    // WorkPlaceLists,
   },
   props: {
     workspaceName: String,

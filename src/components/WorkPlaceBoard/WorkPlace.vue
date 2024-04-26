@@ -7,7 +7,6 @@ the user
       <p class="clickable">Hive</p>
       <p @click="openSettingsPopup" class="SettingsButton">Settings</p>
       <button id="logoutButton" @click="logout">Çkyçu</button>
-
     </div>
     <div class="WorkPlaces">
       <template v-for="(workplace, index) in workplaces" :key="index">
@@ -72,13 +71,8 @@ export default {
     },
     async fetchWorkplaces() {
       try {
-<<<<<<< Updated upstream
-        console.log('Fetching workplaces');
-        const token = Cookies.get('token');
-=======
-        //console.log('Fetching workplaces');
+        console.log("Fetching workplaces");
         const token = Cookies.get("token");
->>>>>>> Stashed changes
 
         const decodedToken = parseJwt(token);
         const userId = decodedToken.nameid;
@@ -91,18 +85,10 @@ export default {
 
         const response = await axios.get(url, {
           headers: {
-<<<<<<< Updated upstream
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json' 
-          }
-        })
-        
-=======
             Authorization: `Bearer ${token}`,
             Accept: "application/json",
           },
         });
->>>>>>> Stashed changes
 
         const data = response.data;
         //console.log("Workplace Data:", data);
@@ -114,20 +100,12 @@ export default {
         }));
 
         //console.log("Mapped Workplaces:", this.workplaces);
-<<<<<<< Updated upstream
-
-
-      } 
-      catch (error) {
+      } catch (error) {
         if (error.response.status === 404) {
           this.workplaces = [];
         } else {
-          console.error('Error fetching workplaces:', error.message);
+          console.error("Error fetching workplaces:", error.message);
         }
-=======
-      } catch (error) {
-        console.error("Error fetching workplaces:", error.message);
->>>>>>> Stashed changes
       }
     },
     async fetchUserInfo() {
