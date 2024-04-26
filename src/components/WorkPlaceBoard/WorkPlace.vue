@@ -11,17 +11,15 @@ the user
     </div>
     <div class="WorkPlaces">
       <template v-for="(workplace, index) in workplaces" :key="index">
-          <WorkPlaces 
-            :workplaceName="workplace.workplaceName"
-            :wId="workplace.wId"
-            :workplaceDescription="workplace.workplaceDescription"
-            @refreshWorkplaces="fetchWorkplaces"
-          >
-          </WorkPlaces>
+        <WorkPlaces
+          :workplaceName="workplace.workplaceName"
+          :wId="workplace.wId"
+          :workplaceDescription="workplace.workplaceDescription"
+          @refreshWorkplaces="fetchWorkplaces"
+        >
+        </WorkPlaces>
       </template>
-      <AddWorkPlace 
-        @refreshWorkplaces="fetchWorkplaces"
-      />
+      <AddWorkPlace @refreshWorkplaces="fetchWorkplaces" />
     </div>
   </div>
 
@@ -37,9 +35,8 @@ import WorkPlaces from "./WorkPlaces.vue";
 import SettingsWorkPlacePopup from "../popups/Settings/UserSetting";
 import AddWorkPlace from "./AddWorkPlace.vue";
 import { parseJwt } from "@/components/Utilities/jwtUtils";
-import Cookies from 'js-cookie';
-import axios from 'axios';
-
+import Cookies from "js-cookie";
+import axios from "axios";
 
 export default {
   name: "WorkPlace",
@@ -47,7 +44,6 @@ export default {
     WorkPlaces,
     SettingsWorkPlacePopup,
     AddWorkPlace,
-    
   },
   data() {
     return {
@@ -55,8 +51,8 @@ export default {
       members: [],
       workplaces: [],
       userInfo: {
-        userName: ''
-      }
+        userName: "",
+      },
     };
   },
   mounted() {
@@ -64,7 +60,7 @@ export default {
   },
   created() {
     this.fetchWorkplaces();
-    //setInterval(this.fetchWorkplaces, 5000);
+    setInterval(this.fetchWorkplaces, 5000);
   },
   methods: {
     openSettingsPopup() {
@@ -74,39 +70,51 @@ export default {
       // Method to toggle visibility of edit popup
       this.showSettingsPopup = !this.showSettingsPopup;
     },
-    async fetchWorkplaces(){
+    async fetchWorkplaces() {
       try {
+<<<<<<< Updated upstream
         console.log('Fetching workplaces');
         const token = Cookies.get('token');
+=======
+        //console.log('Fetching workplaces');
+        const token = Cookies.get("token");
+>>>>>>> Stashed changes
 
         const decodedToken = parseJwt(token);
         const userId = decodedToken.nameid;
 
-
-        if (!userId){
-          throw new Error("User does not exist!")
+        if (!userId) {
+          throw new Error("User does not exist!");
         }
 
         const url = `http://localhost:5236/workspace/user/${userId}`;
 
-        const response = await axios.get(url , {
+        const response = await axios.get(url, {
           headers: {
+<<<<<<< Updated upstream
             'Authorization': `Bearer ${token}`,
             'Accept': 'application/json' 
           }
         })
         
+=======
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
+>>>>>>> Stashed changes
 
         const data = response.data;
         //console.log("Workplace Data:", data);
 
-        this.workplaces = data.map(workplace => ({
+        this.workplaces = data.map((workplace) => ({
           wId: workplace.wId,
           workplaceName: workplace.workspaceName,
-          workplaceDescription: workplace.workspaceDescription
+          workplaceDescription: workplace.workspaceDescription,
         }));
 
         //console.log("Mapped Workplaces:", this.workplaces);
+<<<<<<< Updated upstream
 
 
       } 
@@ -116,52 +124,53 @@ export default {
         } else {
           console.error('Error fetching workplaces:', error.message);
         }
+=======
+      } catch (error) {
+        console.error("Error fetching workplaces:", error.message);
+>>>>>>> Stashed changes
       }
     },
-    async fetchUserInfo(){
-      try{
-        const token = Cookies.get('token');
+    async fetchUserInfo() {
+      try {
+        const token = Cookies.get("token");
 
         const decodedToken = parseJwt(token);
         const userId = decodedToken.nameid;
 
-        if (!userId){
-            throw new Error("User does not exist!")
-          }
+        if (!userId) {
+          throw new Error("User does not exist!");
+        }
 
         const url = `http://localhost:5236/users/${userId}`;
 
-        const response = await axios.get(url , {
+        const response = await axios.get(url, {
           headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json' 
-          }
-        })
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
 
         const data = response.data;
 
         this.userInfo = {
-          userName: data.name
+          userName: data.name,
         };
-      }
-      catch(error) {
-        console.error('Error fetching user info:', error.message);
+      } catch (error) {
+        console.error("Error fetching user info:", error.message);
       }
     },
     logout() {
-      Cookies.remove('token');
-      this.$router.push('/login');
+      Cookies.remove("token");
+      this.$router.push("/login");
     },
-    conTest(){
-      console.log("logfrom workplace.vue")
-    }
+    conTest() {
+      console.log("logfrom workplace.vue");
+    },
   },
 };
 </script>
 
 <style scoped lang="scss">
-
-
 .WorkPlace {
   width: 100%;
   .navBar {
@@ -201,7 +210,7 @@ export default {
 .SettingsButton:hover {
   cursor: pointer;
 }
-#logoutButton{
+#logoutButton {
   border: solid 1px gray;
   color: white;
   background-color: rgb(41, 41, 41);
@@ -215,17 +224,15 @@ export default {
       padding: 3rem 5%;
     }
     .WorkPlaces a {
-    width: calc(50%);
+      width: calc(50%);
     }
   }
-
 }
 @media only screen and (max-width: 480px) {
-  .WorkPlace{
+  .WorkPlace {
     .WorkPlaces a {
       width: calc(100%);
     }
   }
-
 }
 </style>

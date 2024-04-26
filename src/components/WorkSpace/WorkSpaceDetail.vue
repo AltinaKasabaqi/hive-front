@@ -8,32 +8,22 @@
       </div>
     </div>
     <div class="Lists">
-      <div class="List" v-for="list in lists" :key="list.listId">
-        <div class="ListName">
-          <input type="text" v-model="list.listName" @blur="updateListName(list)" />
-          <p class="clickable expandInput removeList" @click="deleteList(list)">X</p>
-        </div>
-        <!-- todo make this into a another file and import it -->
-        <div class="Task expandInput" @click="openTaskDetail">
-          <p class="Title">
-            Title of the task and this can be as long as possible
-          </p>
-          <div>
-            <div class="members">
-            </div>
-          </div>
-        </div>
+      <WorkPlaceLists
+        v-for="list in lists"
+        :key="list.listId"
+        :name="list.ListName"
+      >
+        <!-- <Tasks></Tasks> -->
+      </WorkPlaceLists>
 
-
-        <div class="Task TaskAdd">
-          <p class="Title">
-            <input type="text" placeholder="+  Add a task" value="" />
-          </p>
-        </div>
-      </div>
       <div class="List ListAdd">
         <div class="ListName">
-          <input type="text" placeholder="+ Add a list" v-model="listInput" @blur="addList(listInput)"/>
+          <input
+            type="text"
+            placeholder="+ Add a list"
+            v-model="listInput"
+            @blur="addList(listInput)"
+          />
         </div>
       </div>
     </div>
@@ -49,15 +39,19 @@
 
 <script>
 import SettingsWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
+import WorkPlaceLists from "./Lists/Lists";
 import TaskPopup from "../popups/TaskPopup/TaskPopup.vue";
-import Cookies from 'js-cookie';
-import axios from 'axios';
+// import Tasks from "./Tasks/Tasks";
+import Cookies from "js-cookie";
+import axios from "axios";
 
 export default {
   name: "WorkPlaceDetail",
   components: {
     SettingsWorkPlacePopup,
     TaskPopup,
+    // Tasks,
+    WorkPlaceLists,
   },
   props: {
     workspaceName: String,
@@ -68,8 +62,8 @@ export default {
       showTaskDetail: false,
       members: [],
       lists: [],
-      localWorkspaceName: '',
-      listInput: ''
+      localWorkspaceName: "",
+      listInput: "",
     };
   },
   created() {
@@ -85,125 +79,140 @@ export default {
     },
     async fetchLists() {
       try {
-        const token = Cookies.get('token');
+        const token = Cookies.get("token");
         const wId = this.$route.params.wId;
-        const response = await axios.get(`http://localhost:5236/list/workspace/${wId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
+        const response = await axios.get(
+          `http://localhost:5236/list/workspace/${wId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
           }
-        });
+        );
         const data = response.data;
         console.log(data);
         this.lists = data;
-
       } catch (error) {
         if (error.response.status === 404) {
           this.lists = [];
         } else {
-          console.error('Error fetching lists:', error.message);
+          console.error("Error fetching lists:", error.message);
         }
       }
     },
     async fetchWorkplaceName() {
       try {
-        const token = Cookies.get('token');
+        const token = Cookies.get("token");
         const wId = this.$route.params.wId;
-        const response = await axios.get(`http://localhost:5236/workspace/${wId}`, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
+        const response = await axios.get(
+          `http://localhost:5236/workspace/${wId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
           }
-        });
+        );
         const data = response.data;
 
         this.localWorkspaceName = data.workspaceName;
-
       } catch (error) {
-        console.error('Error fetching workspace name:', error);
+        console.error("Error fetching workspace name:", error);
       }
     },
     async updateListName(list) {
       try {
-        const token = Cookies.get('token');
-        const response = await axios.put(`http://localhost:5236/list/${list.listId}`, {
-          listId: list.listId,
-          listName: list.listName,
-          workSpace: {
-            user: {
-              email: ''
-            }
+        const token = Cookies.get("token");
+        const response = await axios.put(
+          `http://localhost:5236/list/${list.listId}`,
+          {
+            listId: list.listId,
+            listName: list.listName,
+            workSpace: {
+              user: {
+                email: "",
+              },
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
           }
-        }, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
+        );
 
         if (response.status === 204) {
-          console.log('List name updated successfully');
+          console.log("List name updated successfully");
         } else {
-          console.error('Failed to update list name');
+          console.error("Failed to update list name");
         }
       } catch (error) {
-        console.error('Error updating list name:', error);
+        console.error("Error updating list name:", error);
       }
     },
     async addList(listInput) {
       try {
         const wId = this.$route.params.wId;
-        const token = Cookies.get('token');
-        const response = await axios.post(`http://localhost:5236/list`, {
-          listId: '0',
-          listName: listInput,
-          workSpaceId: wId,
-          workSpace: {
-            user: {
-              email: ''
-            }
+        const token = Cookies.get("token");
+        const response = await axios.post(
+          `http://localhost:5236/list`,
+          {
+            listId: "0",
+            listName: listInput,
+            workSpaceId: wId,
+            workSpace: {
+              user: {
+                email: "",
+              },
+            },
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
           }
-        }, {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-          }
-        });
+        );
 
         if (response.status === 201) {
-          this.listInput = '';
+          this.listInput = "";
           this.fetchLists();
-          console.log('List added successfully');
+          console.log("List added successfully");
         } else {
-          console.error('Failed to added list');
+          console.error("Failed to added list");
         }
       } catch (error) {
-        console.error('Error adding list: ', error);
+        console.error("Error adding list: ", error);
       }
     },
     async deleteList(list) {
       try {
-        const token = Cookies.get('token');
-        const response = await axios.delete(`http://localhost:5236/list/${list.listId}`,  {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
+        const token = Cookies.get("token");
+        const response = await axios.delete(
+          `http://localhost:5236/list/${list.listId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
           }
-        });
+        );
 
         if (response.status === 204) {
           this.fetchLists();
-          console.log('List deleted successfully');
+          console.log("List deleted successfully");
         } else {
-          console.error('Failed to deleted list');
+          console.error("Failed to deleted list");
         }
       } catch (error) {
-        console.error('Error deleteing list: ', error);
+        console.error("Error deleteing list: ", error);
       }
-    }
+    },
   },
 };
 </script>
@@ -232,10 +241,12 @@ export default {
   height: 100%;
   display: flex;
   overflow: scroll;
-  // overflow: hidden;
+  height: 100%;
+  display: flex;
+  overflow-x: auto;
+  overflow-y: auto;
   .removeList {
     transition: 0.1s;
-    
   }
   .removeList:hover {
     color: rgb(154, 40, 40);
@@ -246,42 +257,18 @@ export default {
   align-items: center;
   flex-direction: column;
   justify-content: flex;
-  max-width: 80rem;
-  width: 20%;
 
   min-height: 100%;
   background-color: #3f3f3f65;
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
-  overflow: hidden;
-  .Task:hover {
-    background-color: #ffffff50;
-  }
-  .Task:active {
-    transform: scale(0.95);
-  }
-  .Task {
-    transition: 0.1s;
-    cursor: pointer;
-    width: 100%;
-    border-top: 1px solid #fff;
-    border-bottom: 1px solid #fff;
-    padding: 3rem 4rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    .members {
-      display: flex;
-      gap: 0.6rem;
-      img {
-        background-color: rgb(51, 51, 117);
-        width: 3rem;
-        aspect-ratio: 1/1;
-        border-radius: 100%;
-      }
-    }
-  }
+  width: 40rem; /* Minimum width for each list */
+  height: 100%; /* Occupy full height */
+  flex-shrink: 0; /* Prevent lists from shrinking */
+  background-color: #3f3f3f65;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  overflow: hidden; /* Hide overflow content */
   .ListName {
     padding: 3rem 0px;
     width: 80%;
@@ -326,6 +313,55 @@ input:focus {
   }
 }
 
+.List {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: flex;
+  // width: 10rem;
+  // min-height: 100%;
+  // background-color: #3f3f3f65;
+  border-left: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  overflow: hidden;
+  // background: red;
+  .Task:hover {
+    background-color: #ffffff50;
+  }
+  .Task:active {
+    transform: scale(0.95);
+  }
+  .Task {
+    transition: 0.1s;
+    cursor: pointer;
+    width: 100%;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    padding: 3rem 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    .members {
+      display: flex;
+      gap: 0.6rem;
+      img {
+        background-color: rgb(51, 51, 117);
+        width: 3rem;
+        aspect-ratio: 1/1;
+        border-radius: 100%;
+      }
+    }
+  }
+  .ListName {
+    padding: 3rem 0px;
+    width: 80%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+  }
+}
+
 @media only screen and (max-width: 890px) {
   .workSpaceLists {
     .topBarContainer {
@@ -333,6 +369,9 @@ input:focus {
         padding: 3rem 5%;
       }
     }
+  }
+  .List {
+    min-width: 30rem;
   }
 }
 </style>
