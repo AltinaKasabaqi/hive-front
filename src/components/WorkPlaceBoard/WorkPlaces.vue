@@ -1,7 +1,14 @@
 // this is the page to for each workspace card
 <template>
   <div class="WorkPlaceCardContainer">
-    <router-link :to="{ name: 'workplaceDetail', params: { wId: wId }, props: { wId: wId } }" class="router-link-custom">
+    <router-link
+      :to="{
+        name: 'workplaceDetail',
+        params: { wId: wId },
+        props: { wId: wId },
+      }"
+      class="router-link-custom"
+    >
       <div class="WorkPlaceCard clickable">
         <h3>{{ workplaceName }}</h3>
         <p>{{ workplaceDescription }}</p>
@@ -26,7 +33,6 @@
   </div>
 </template>
 
-
 <script>
 import EditWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
 
@@ -38,7 +44,7 @@ export default {
   props: {
     workplaceName: String, // Declare prop for workplace name
     wId: Number,
-    workplaceDescription: String
+    workplaceDescription: String,
   },
   data() {
     return {
@@ -46,23 +52,23 @@ export default {
       members: [],
     };
   },
-  emits: ['refreshWorkplaces'],
+  emits: ["refreshWorkplaces"],
   methods: {
     openEditPopup() {
       // Method to toggle visibility of edit popup
       this.showEditPopup = !this.showEditPopup;
     },
     updateWorkplacesPage() {
-      this.$emit('refreshWorkplaces');
-    }
+      this.$emit("refreshWorkplaces");
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .router-link-custom {
-  text-decoration: none; 
-  color: inherit; 
+  text-decoration: none;
+  color: inherit;
   width: calc(25%);
   margin-bottom: 2rem;
 }
@@ -72,17 +78,21 @@ export default {
   flex: 1;
   min-width: 25%;
   border: 1px solid #fff;
+  background-color: #3f3f3f65;
+
   overflow: hidden;
 }
 
 .WorkPlaceCard {
   transition: 0.2s;
   // border-radius: 1.4rem;
-  background-color: #3f3f3f65;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   padding: 3rem 10rem;
   gap: 2rem;
+  line-break: loose;
   h3 {
     font-size: var(--font-M);
   }
