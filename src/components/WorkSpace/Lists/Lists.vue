@@ -1,7 +1,7 @@
 <template>
-  <div class="List" :key="list.listId">
+  <div class="List">
     <div class="ListName">
-      <input type="text" @blur="updateListName(list)" />
+      <input type="text" v-model="listNameInput" @blur="updateListName(list)" />
       <p class="clickable expandInput removeList" @click="deleteList(list)">
         X
       </p>
@@ -15,75 +15,25 @@ import axios from "axios";
 
 export default {
   name: "WorkPlaceLists",
+  props: {
+    listName: String,
+    listId: Number,
+  },
   data() {
     return {
-      showSettingsPopup: false,
-      showTaskDetail: false,
-      members: [],
-      lists: [],
-      localWorkspaceName: "",
-      listInput: "",
-    };
-  },
-  created() {
-    this.fetchLists();
-    this.fetchWorkplaceName();
+      listNameInput: this.listName,
+      listIdInput: this.listId
+    }
   },
   methods: {
-    openSettingsPopup() {
-      this.showSettingsPopup = !this.showSettingsPopup;
-    },
-    openTaskDetail() {
-      this.showTaskDetail = !this.showTaskDetail;
-    },
-    async fetchLists() {
-      try {
-        const token = Cookies.get("token");
-        const wId = this.$route.params.wId;
-        const response = await axios.get(
-          `http://localhost:5236/list/workspace/${wId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        const data = response.data;
-        console.log(data);
-        this.lists = data;
-      } catch (error) {
-        console.error("Error fetching lists:", error);
-      }
-    },
-    async fetchWorkplaceName() {
-      try {
-        const token = Cookies.get("token");
-        const wId = this.$route.params.wId;
-        const response = await axios.get(
-          `http://localhost:5236/workspace/${wId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-            },
-          }
-        );
-        const data = response.data;
-
-        this.localWorkspaceName = data.workspaceName;
-      } catch (error) {
-        console.error("Error fetching workspace name:", error);
-      }
-    },
-    async updateListName(list) {
+    async updateListName() {
       try {
         const token = Cookies.get("token");
         const response = await axios.put(
-          `http://localhost:5236/list/${list.listId}`,
+          `http://localhost:5236/list/${this.listId}`,
           {
-            listId: list.listId,
-            listName: list.listName,
+            listId: this.listIdInput,
+            listName: this.listNameInput,
             workSpace: {
               user: {
                 email: "",
@@ -108,47 +58,11 @@ export default {
         console.error("Error updating list name:", error);
       }
     },
-    async addList(listInput) {
-      try {
-        const wId = this.$route.params.wId;
-        const token = Cookies.get("token");
-        const response = await axios.post(
-          `http://localhost:5236/list`,
-          {
-            listId: "0",
-            listName: listInput,
-            workSpaceId: wId,
-            workSpace: {
-              user: {
-                email: "",
-              },
-            },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.status === 201) {
-          this.listInput = "";
-          this.fetchLists();
-          console.log("List added successfully");
-        } else {
-          console.error("Failed to added list");
-        }
-      } catch (error) {
-        console.error("Error adding list: ", error);
-      }
-    },
-    async deleteList(list) {
+    async deleteList() {
       try {
         const token = Cookies.get("token");
         const response = await axios.delete(
-          `http://localhost:5236/list/${list.listId}`,
+          `http://localhost:5236/list/${this.listId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -159,7 +73,7 @@ export default {
         );
 
         if (response.status === 204) {
-          this.fetchLists();
+          this.$emit("refreshLists")
           console.log("List deleted successfully");
         } else {
           console.error("Failed to deleted list");
@@ -168,7 +82,7 @@ export default {
         console.error("Error deleteing list: ", error);
       }
     },
-  },
+  }
 };
 </script>
 

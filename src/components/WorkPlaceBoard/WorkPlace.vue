@@ -59,7 +59,7 @@ export default {
   },
   created() {
     this.fetchWorkplaces();
-    setInterval(this.fetchWorkplaces, 5000);
+    //setInterval(this.fetchWorkplaces, 5000);
   },
   methods: {
     openSettingsPopup() {
@@ -91,13 +91,14 @@ export default {
         });
 
         const data = response.data;
-        //console.log("Workplace Data:", data);
+        console.log("Workplace Data:", data);
 
         this.workplaces = data.map((workplace) => ({
           wId: workplace.wId,
           workplaceName: workplace.workspaceName,
           workplaceDescription: workplace.workspaceDescription,
         }));
+        console.log("Workplace Data2:", this.workplaces);
 
         //console.log("Mapped Workplaces:", this.workplaces);
       } catch (error) {

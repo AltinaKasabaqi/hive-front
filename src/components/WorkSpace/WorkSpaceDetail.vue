@@ -8,14 +8,16 @@
       </div>
     </div>
     <div class="Lists">
-      <!-- <WorkPlaceLists
-        v-for="list in lists"
-        :key="list.listId"
-        :name="list.ListName"
-      > 
-        <Tasks></Tasks>
-      </WorkPlaceLists>
--->
+      <template v-for="(WorkPlaceList, index) in lists" :key="index">
+        <WorkPlaceLists
+          :listName="WorkPlaceList.listName"
+          :listId="WorkPlaceList.listId"
+          @refreshLists="fetchLists"
+        > 
+          <Tasks></Tasks>
+        </WorkPlaceLists>
+      </template>
+
       <div class="List ListAdd">
         <div class="ListName">
           <input
@@ -39,7 +41,7 @@
 
 <script>
 import SettingsWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
-// import WorkPlaceLists from "./Lists/Lists";
+import WorkPlaceLists from "./Lists/Lists.vue";
 import TaskPopup from "../popups/TaskPopup/TaskPopup.vue";
 // import Tasks from "./Tasks/Tasks";
 import Cookies from "js-cookie";
@@ -51,7 +53,7 @@ export default {
     SettingsWorkPlacePopup,
     TaskPopup,
     // Tasks,
-    // WorkPlaceLists,
+    WorkPlaceLists,
   },
   props: {
     workspaceName: String,
@@ -92,7 +94,13 @@ export default {
         );
         const data = response.data;
         console.log(data);
-        this.lists = data;
+        this.lists = data.map((List) => ({
+          listId: List.listId,
+          listName: List.listName,
+        }));
+
+        console.log("lists: ",this.lists);
+
       } catch (error) {
         if (error.response.status === 404) {
           this.lists = [];
@@ -119,38 +127,6 @@ export default {
         this.localWorkspaceName = data.workspaceName;
       } catch (error) {
         console.error("Error fetching workspace name:", error);
-      }
-    },
-    async updateListName(list) {
-      try {
-        const token = Cookies.get("token");
-        const response = await axios.put(
-          `http://localhost:5236/list/${list.listId}`,
-          {
-            listId: list.listId,
-            listName: list.listName,
-            workSpace: {
-              user: {
-                email: "",
-              },
-            },
-          },
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.status === 204) {
-          console.log("List name updated successfully");
-        } else {
-          console.error("Failed to update list name");
-        }
-      } catch (error) {
-        console.error("Error updating list name:", error);
       }
     },
     async addList(listInput) {
@@ -188,31 +164,7 @@ export default {
       } catch (error) {
         console.error("Error adding list: ", error);
       }
-    },
-    async deleteList(list) {
-      try {
-        const token = Cookies.get("token");
-        const response = await axios.delete(
-          `http://localhost:5236/list/${list.listId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        if (response.status === 204) {
-          this.fetchLists();
-          console.log("List deleted successfully");
-        } else {
-          console.error("Failed to deleted list");
-        }
-      } catch (error) {
-        console.error("Error deleteing list: ", error);
-      }
-    },
+    }, 
   },
 };
 </script>
