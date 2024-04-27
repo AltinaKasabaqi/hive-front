@@ -14,7 +14,6 @@
           :listId="WorkPlaceList.listId"
           @refreshLists="fetchLists"
         > 
-          <Tasks></Tasks>
         </WorkPlaceLists>
       </template>
 
@@ -43,7 +42,6 @@
 import SettingsWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
 import WorkPlaceLists from "./Lists/Lists.vue";
 import TaskPopup from "../popups/TaskPopup/TaskPopup.vue";
-// import Tasks from "./Tasks/Tasks";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -52,7 +50,6 @@ export default {
   components: {
     SettingsWorkPlacePopup,
     TaskPopup,
-    // Tasks,
     WorkPlaceLists,
   },
   props: {

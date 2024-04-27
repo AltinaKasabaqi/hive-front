@@ -17,14 +17,14 @@
       />
 
       <input type="" name="" value="" placeholder="Invite people by username" />
-      <button class="expandInput">Add</button>
       <div class="EditWorkPlaceAllMembers">
         <p>Members on this workplace</p>
 
         <EditWorkPlaceAllMembers
-          :userName="'User 1'"
+          :userName="''"
           :userProfile="''"
-          :member="'chekced'"
+          :member="''"
+          :wId="wId"
         ></EditWorkPlaceAllMembers>
       </div>
       <div class="EditWorkPlaceUpdateChanges">
@@ -41,7 +41,6 @@
 
 <script>
 import EditWorkPlaceAllMembers from "../Members/EditWorkPlaceMembers";
-import { parseJwt } from "@/components/Utilities/jwtUtils";
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
@@ -84,9 +83,18 @@ export default {
       try {
         const url = `http://localhost:5236/workspace/${this.wId}`;
         const token = Cookies.get('token');
-        const decodedToken = parseJwt(token);
-        const userId = decodedToken.nameid;
         const wId = this.wId;
+
+        const userData = await axios.get(url,
+        {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Accept': 'application/json' 
+          }
+        });
+
+        const data = userData.data;
+        const userId = data.user.userId;
 
         const response = await axios.put(url, {
           wId: wId,

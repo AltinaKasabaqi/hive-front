@@ -15,18 +15,6 @@
         v-model="workspaceDescriptionInput"
         placeholder="Entere your Work Place description"
       />
-
-      <input type="" name="" value="" placeholder="Invite people by username" />
-      <button class="expandInput">Add</button>
-      <div class="EditWorkPlaceAllMembers">
-        <p>Members on this workplace</p>
-
-        <EditWorkPlaceAllMembers
-          :userName="'User 1'"
-          :userProfile="''"
-          :member="'chekced'"
-        ></EditWorkPlaceAllMembers>
-      </div>
       <div class="EditWorkPlaceUpdateChanges">
         <button class="WorkPlaceSave expandInput" @click="createWorkplace">
           Save
@@ -37,7 +25,6 @@
 </template>
 
 <script>
-import EditWorkPlaceAllMembers from "../Members/EditWorkPlaceMembers";
 import { parseJwt } from "@/components/Utilities/jwtUtils";
 import Cookies from 'js-cookie';
 import axios from 'axios';
@@ -51,7 +38,6 @@ export default {
       };
   },
   components: {
-    EditWorkPlaceAllMembers,
   },
   props: {
     workplaceName: {

@@ -14,7 +14,16 @@ the user
           :workplaceName="workplace.workplaceName"
           :wId="workplace.wId"
           :workplaceDescription="workplace.workplaceDescription"
-          @refreshWorkplaces="fetchWorkplaces"
+          @refreshWorkplaces="() => { fetchWorkplaces(); fetchCollabs(); }"
+        >
+        </WorkPlaces>
+      </template>
+      <template v-for="(workplace, index) in collabs" :key="index">
+        <WorkPlaces
+          :workplaceName="workplace.workSpace.workspaceName"
+          :wId="workplace.workSpace.wId"
+          :workplaceDescription="workplace.workSpace.workspaceDescription"
+          @refreshWorkplaces="() => { fetchWorkplaces(); fetchCollabs(); }"
         >
         </WorkPlaces>
       </template>
@@ -49,13 +58,16 @@ export default {
       showSettingsPopup: false,
       members: [],
       workplaces: [],
+      collabs: [],
       userInfo: {
         userName: "",
+        userEmail: "",
       },
     };
   },
-  mounted() {
-    this.fetchUserInfo();
+  async mounted() {
+    await this.fetchUserInfo();
+    this.fetchCollabs();
   },
   created() {
     this.fetchWorkplaces();
@@ -71,7 +83,6 @@ export default {
     },
     async fetchWorkplaces() {
       try {
-        console.log("Fetching workplaces");
         const token = Cookies.get("token");
 
         const decodedToken = parseJwt(token);
@@ -91,19 +102,56 @@ export default {
         });
 
         const data = response.data;
-        console.log("Workplace Data:", data);
+        //console.log("Workplace Data:", data);
 
         this.workplaces = data.map((workplace) => ({
           wId: workplace.wId,
           workplaceName: workplace.workspaceName,
           workplaceDescription: workplace.workspaceDescription,
         }));
-        console.log("Workplace Data2:", this.workplaces);
+        //console.log("Workplace Data2:", this.workplaces);
 
         //console.log("Mapped Workplaces:", this.workplaces);
       } catch (error) {
         if (error.response.status === 404) {
           this.workplaces = [];
+        } else {
+          console.error("Error fetching workplaces:", error.message);
+        }
+      }
+    },
+    async fetchCollabs() {
+      try {
+        const token = Cookies.get("token");
+        const userEmail = this.userInfo.userEmail;
+
+        const url = `http://localhost:5236/api/collaborators/by-email/${userEmail}`;
+
+        const response = await axios.get(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
+
+        const data = response.data;
+
+        this.collabs = data.map(collaborator => ({
+          collaboratorId: collaborator.collaboratorId,
+          userEmail: collaborator.userEmail,
+          wId: collaborator.workSpaceId,
+          workSpace: {
+            wId: collaborator.workSpaceId,
+            workspaceName: collaborator.workSpace.workspaceName,
+            workspaceDescription: collaborator.workSpace.workspaceDescription,
+            userId: collaborator.workSpace.userId,
+          }
+        }));
+
+        //console.log("Mapped Workplaces:", this.workplaces);
+      } catch (error) {
+        if (error.response.status === 404) {
+          this.collabs = [];
         } else {
           console.error("Error fetching workplaces:", error.message);
         }
@@ -133,6 +181,7 @@ export default {
 
         this.userInfo = {
           userName: data.name,
+          userEmail: data.email,
         };
       } catch (error) {
         console.error("Error fetching user info:", error.message);

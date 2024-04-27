@@ -6,15 +6,20 @@
         X
       </p>
     </div>
+    <ListTasks></ListTasks>
   </div>
 </template>
 
 <script>
 import Cookies from "js-cookie";
 import axios from "axios";
+import ListTasks from "../Tasks/Tasks.vue";
 
 export default {
   name: "WorkPlaceLists",
+  components: {
+    ListTasks,
+  },
   props: {
     listName: String,
     listId: Number,
