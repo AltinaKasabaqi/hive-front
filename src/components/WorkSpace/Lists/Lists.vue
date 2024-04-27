@@ -6,7 +6,9 @@
         X
       </p>
     </div>
-    <ListTasks></ListTasks>
+    <ListTasks
+    :list-id="this.listId"
+    ></ListTasks>
   </div>
 </template>
 

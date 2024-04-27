@@ -1,36 +1,117 @@
-<template>
-  <!-- todo make this into a another file and import it -->
-  <div class="Task expandInput" @click="openTaskDetail">
-    <p class="Title">Title of the task and this can be as long as possible</p>
+<template >
+  <div class="Task expandInput" @click="openTaskDetail(task)" v-for="(task, index) in this.tasks" :key="index">
+    <p class="Title"> {{ task.taskName }} </p>
     <div>
       <div class="members"></div>
     </div>
   </div>
 
-  <SettingsWorkPlacePopup
-    v-if="showSettingsPopup"
-    @close="showSettingsPopup = false"
-    :workplaceName="workplaceName"
-    :members="members"
+  <input type="text" v-model="taskNameInput" @blur="addTask" />
+
+  <TaskPopup
+    @taskDeleted="fetchTasks"
+    v-if="showTaskDetail"
+    @close="showTaskDetail = false"
+    :taskName="selectedTask.taskName"
+    :taskDescription="selectedTask.taskDescription"
+    :taskId="selectedTask.taskId"
   />
 </template>
 
 <script>
-import SettingsWorkPlacePopup from "../../popups/EditWorkPlace/EditWorkPlacePopup";
+import TaskPopup from '@/components/popups/TaskPopup/TaskPopup.vue';
+import Cookies from "js-cookie";
+import axios from "axios";
 
 export default {
   name: "ListTasks",
+  props: {
+    listId: {
+      type: Number,
+      required: true,
+    },
+  },
   components: {
-    SettingsWorkPlacePopup,
+    TaskPopup,
   },
   data() {
     return {
-      showSettingsPopup: false,
+      showTaskDetail: false,
+      tasks: [],
+      taskNameInput: ''
     };
   },
+  created() {
+    this.fetchTasks();
+  },
   methods: {
-    openTaskDetail() {
+    openTaskDetail(task) {
       this.showTaskDetail = !this.showTaskDetail;
+
+      if (this.showTaskDetail) {
+      this.selectedTask = task;
+      }
+    },
+    async fetchTasks() {
+      try {
+        const token = Cookies.get("token");
+
+        const response = await axios.get(`http://localhost:5236/task/list/${this.listId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+        this.tasks = response.data;
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+      }
+    },
+    async addTask() {
+      try {
+        const token = Cookies.get("token");
+
+        const newTask = {
+        taskName: this.taskNameInput,
+        taskDescription: "",
+        startDate: new Date().toISOString(),
+        endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+        priority: 0,
+        listId: this.listId,
+        list: {
+          ListName: "",
+          WorkSpace: {
+            User: {
+              email: ""
+            }
+          }
+        },
+
+      };
+
+        const response = await axios.post(
+          `http://localhost:5236/task`,
+          newTask,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.status === 204) {
+          this.fetchTasks();
+          this.taskNameInput="";
+        } else {
+          this.fetchTasks();
+          this.taskNameInput="";
+        }
+      } catch (error) {
+        console.error("Error adding task: ", error);
+      }
     },
   },
 };

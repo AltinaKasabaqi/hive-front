@@ -93,7 +93,7 @@ export default {
           }
         );
         const data = response.data;
-        console.log(data);
+        //console.log(data);
         this.lists = data.map((List) => ({
           listId: List.listId,
           listName: List.listName,

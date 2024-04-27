@@ -2,11 +2,15 @@
   <div class="TaskDetailPopupContainer" @click="closePopup">
     <div class="TaskDetailPopup" @click.stop>
       <!-- todo taking the value from the objects in api -->
-      <input type="text" placeholder="Title" value="" class="lineInputExpand" />
+      <input 
+        type="text" 
+        placeholder="Title" 
+        v-model="localTaskName" 
+        class="lineInputExpand" />
       <input
         type="text"
         placeholder="Content"
-        value=""
+        v-model="localTaskDescription"
         class="lineInputExpand"
       />
       <!-- todo add options to select members -->
@@ -14,7 +18,7 @@
         <button class="WorkPlaceSave expandInput" @click="saveChanges">
           Save
         </button>
-        <button class="WorkPlaceDelete expandInput" @click="deleteWorkPlace">
+        <button class="WorkPlaceDelete expandInput" @click="deleteTask">
           Delete
         </button>
       </div>
@@ -23,20 +27,65 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
+import axios from "axios";
+
 export default {
   name: "TaskPopup",
+  props: {
+    taskName: {
+      type: String,
+      default: ""
+    },
+    taskDescription: {
+      type: String,
+      default: ""
+    },
+    taskId: {
+      type: Number,
+      default: 0
+    }
+  },
+  data() {
+    return {
+      localTaskName: this.taskName,
+      localTaskDescription: this.taskDescription,
+      localTaskId: this.taskId
+    };
+  },
   methods: {
     closePopup(event) {
       if (event.target.classList.contains("TaskDetailPopupContainer")) {
         this.$emit("close");
       }
     },
-    saveChanges() {
+    saveTask() {
       // TODO Implement saving changes logic here
       this.$emit("close");
     },
-    deleteWorkPlace() {
-      // TODO Implement deleting workplace logic here
+    async deleteTask() {
+      try {
+        const token = Cookies.get("token");
+        const response = await axios.delete(
+          `http://localhost:5236/task/${this.localTaskId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+
+        if (response.status === 204) {
+          this.$emit("taskDeleted");
+        } else {
+          this.$emit("taskDeleted");
+          console.error("Failed to delete task");
+        }
+      } catch (error) {
+        console.error("Error deleteing list: ", error);
+      }
       this.$emit("close");
     },
   },

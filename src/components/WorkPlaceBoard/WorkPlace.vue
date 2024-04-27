@@ -76,7 +76,6 @@ export default {
   methods: {
     openSettingsPopup() {
       //console.log("Settings clicked");
-      // Add this line inside the method
       console.log("showSettingsPopup:", this.showSettingsPopup);
       // Method to toggle visibility of edit popup
       this.showSettingsPopup = !this.showSettingsPopup;
