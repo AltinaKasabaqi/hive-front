@@ -99,8 +99,6 @@ export default {
           listName: List.listName,
         }));
 
-        console.log("lists: ",this.lists);
-
       } catch (error) {
         if (error.response.status === 404) {
           this.lists = [];
@@ -123,7 +121,6 @@ export default {
           }
         );
         const data = response.data;
-        console.log("FUCK,", data)
 
         this.localWorkspaceName = data.workspaceName;
         this.localWorkspaceDescription = data.workspaceDescription;
