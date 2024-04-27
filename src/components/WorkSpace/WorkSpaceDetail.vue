@@ -4,7 +4,7 @@
       <div class="topBar">
         <!-- todo take the name as a prop -->
         <h4>{{ localWorkspaceName }}</h4>
-        <p @click="openSettingsPopup" class="clickable">Settings</p>
+        <p @click="openEditPopup" class="clickable">Settings</p>
       </div>
     </div>
     <div class="Lists">
@@ -30,16 +30,18 @@
     </div>
   </div>
   <TaskPopup v-if="showTaskDetail" @close="showTaskDetail = false" />
-  <SettingsWorkPlacePopup
-    v-if="showSettingsPopup"
-    @close="showSettingsPopup = false"
-    :workplaceName="workplaceName"
-    :members="members"
-  />
+  <EditWorkPlacePopup
+      v-if="showEditPopup"
+      @close="showEditPopup = false"
+      :workplaceName="localWorkspaceName"
+      :members="members"
+      :workplaceDescription="localWorkspaceDescription"
+      :wId="this.$route.params.wId"
+    />
 </template>
 
 <script>
-import SettingsWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup";
+import EditWorkPlacePopup from "../popups/EditWorkPlace/EditWorkPlacePopup.vue";
 import WorkPlaceLists from "./Lists/Lists.vue";
 import TaskPopup from "../popups/TaskPopup/TaskPopup.vue";
 import Cookies from "js-cookie";
@@ -48,7 +50,7 @@ import axios from "axios";
 export default {
   name: "WorkPlaceDetail",
   components: {
-    SettingsWorkPlacePopup,
+    EditWorkPlacePopup,
     TaskPopup,
     WorkPlaceLists,
   },
@@ -57,11 +59,12 @@ export default {
   },
   data() {
     return {
-      showSettingsPopup: false,
+      showEditPopup: false,
       showTaskDetail: false,
       members: [],
       lists: [],
       localWorkspaceName: "",
+      localWorkspaceDescription: "",
       listInput: "",
     };
   },
@@ -70,8 +73,8 @@ export default {
     this.fetchWorkplaceName();
   },
   methods: {
-    openSettingsPopup() {
-      this.showSettingsPopup = !this.showSettingsPopup;
+    openEditPopup() {
+      this.showEditPopup = !this.showEditPopup;
     },
     openTaskDetail() {
       this.showTaskDetail = !this.showTaskDetail;
@@ -120,8 +123,10 @@ export default {
           }
         );
         const data = response.data;
+        console.log("FUCK,", data)
 
         this.localWorkspaceName = data.workspaceName;
+        this.localWorkspaceDescription = data.workspaceDescription;
       } catch (error) {
         console.error("Error fetching workspace name:", error);
       }

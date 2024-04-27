@@ -16,7 +16,6 @@
         placeholder="Entere your Work Place description"
       />
 
-      <input type="" name="" value="" placeholder="Invite people by username" />
       <div class="EditWorkPlaceAllMembers">
         <p>Members on this workplace</p>
 
