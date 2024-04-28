@@ -14,7 +14,12 @@ the user
           :workplaceName="workplace.workplaceName"
           :wId="workplace.wId"
           :workplaceDescription="workplace.workplaceDescription"
-          @refreshWorkplaces="() => { fetchWorkplaces(); fetchCollabs(); }"
+          @refreshWorkplaces="
+            () => {
+              fetchWorkplaces();
+              fetchCollabs();
+            }
+          "
         >
         </WorkPlaces>
       </template>
@@ -23,14 +28,19 @@ the user
           :workplaceName="workplace.workSpace.workspaceName"
           :wId="workplace.workSpace.wId"
           :workplaceDescription="workplace.workSpace.workspaceDescription"
-          @refreshWorkplaces="() => { fetchWorkplaces(); fetchCollabs(); }"
+          @refreshWorkplaces="
+            () => {
+              fetchWorkplaces();
+              fetchCollabs();
+            }
+          "
         >
         </WorkPlaces>
       </template>
       <AddWorkPlace @refreshWorkplaces="fetchWorkplaces" />
     </div>
   </div>
-
+  <NotificationPopup></NotificationPopup>
   <SettingsWorkPlacePopup
     v-if="showSettingsPopup"
     @close="showSettingsPopup = false"
@@ -41,6 +51,7 @@ the user
 <script>
 import WorkPlaces from "./WorkPlaces.vue";
 import SettingsWorkPlacePopup from "../popups/Settings/UserSetting";
+import NotificationPopup from "../popups/Notifications/NotificationPupup";
 import AddWorkPlace from "./AddWorkPlace.vue";
 import { parseJwt } from "@/components/Utilities/jwtUtils";
 import Cookies from "js-cookie";
@@ -52,6 +63,7 @@ export default {
     WorkPlaces,
     SettingsWorkPlacePopup,
     AddWorkPlace,
+    NotificationPopup,
   },
   data() {
     return {
@@ -135,7 +147,7 @@ export default {
 
         const data = response.data;
 
-        this.collabs = data.map(collaborator => ({
+        this.collabs = data.map((collaborator) => ({
           collaboratorId: collaborator.collaboratorId,
           userEmail: collaborator.userEmail,
           wId: collaborator.workSpaceId,
@@ -144,7 +156,7 @@ export default {
             workspaceName: collaborator.workSpace.workspaceName,
             workspaceDescription: collaborator.workSpace.workspaceDescription,
             userId: collaborator.workSpace.userId,
-          }
+          },
         }));
 
         //console.log("Mapped Workplaces:", this.workplaces);
