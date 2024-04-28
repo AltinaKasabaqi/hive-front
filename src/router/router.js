@@ -12,13 +12,13 @@ const routes = [
     path: "/workplace",
     name: "workplace",
     component: () => import("../components/WorkPlaceBoard/WorkPlace.vue"),
-    meta: { requiresAuth: false}
+    meta: { requiresAuth:true}
   },
   {
     path: "/workplace/detail/:wId",
     name: "workplaceDetail",
     component: () => import("../components/WorkSpace/WorkSpaceDetail.vue"),
-    meta: { requiresAuth: false}
+    meta: { requiresAuth: true}
   },
   {
     path: "/login",
