@@ -1,12 +1,17 @@
 <template>
   <div class="workSpaceLists">
+    <!-- Top Bar -->
     <div class="topBarContainer">
       <div class="topBar">
         <h4>{{ localWorkspaceName }}</h4>
+        <!-- Clickable "Settings" link -->
         <p @click="openEditPopup" class="clickable">Settings</p>
       </div>
     </div>
+
+    <!-- Lists Section -->
     <div class="Lists">
+      <!-- Render each WorkPlaceList component -->
       <WorkPlaceLists
         v-for="(WorkPlaceList, index) in lists"
         :key="`${componentKey}-${index}`"
@@ -14,12 +19,12 @@
         :listId="WorkPlaceList.listId"
         @refreshLists="fetchLists"
         @refresh-tasks="forceRerender"
-      >
-        >
-      </WorkPlaceLists>
+      ></WorkPlaceLists>
 
+      <!-- Add a new list -->
       <div class="List ListAdd">
         <div class="ListName">
+          <!-- Input field for adding a list -->
           <input
             type="text"
             placeholder="+ Add a list"
@@ -30,6 +35,8 @@
       </div>
     </div>
   </div>
+
+  <!-- Task Popup and Edit Workspace Popup -->
   <TaskPopup v-if="showTaskDetail" @close="showTaskDetail = false" />
   <EditWorkPlacePopup
     v-if="showEditPopup"
@@ -85,15 +92,12 @@ export default {
       try {
         const token = Cookies.get("token");
         const wId = this.$route.params.wId;
-        const response = await axios.get(
-          `http://localhost:5236/list/workspace/${wId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-            },
-          }
-        );
+        const response = await axios.get(`http://localhost:5236/list/workspace/${wId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
         const data = response.data;
         //console.log(data);
         this.lists = data.map((List) => ({
@@ -112,15 +116,12 @@ export default {
       try {
         const token = Cookies.get("token");
         const wId = this.$route.params.wId;
-        const response = await axios.get(
-          `http://localhost:5236/workspace/${wId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-            },
-          }
-        );
+        const response = await axios.get(`http://localhost:5236/workspace/${wId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+          },
+        });
         const data = response.data;
 
         this.localWorkspaceName = data.workspaceName;
@@ -176,7 +177,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// todo hide the scroll bar
 .workSpaceLists {
   height: 100vh;
   display: flex;

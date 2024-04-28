@@ -1,11 +1,15 @@
 <template>
+  <!-- Task List -->
   <div class="List">
+    <!-- List Name and Input -->
     <div class="ListName">
       <input type="text" v-model="listNameInput" @blur="updateListName(list)" />
       <p class="clickable expandInput removeList" @click="deleteList(list)">
         X
       </p>
     </div>
+
+    <!-- List Content (Tasks) -->
     <div class="ListContent" ref="listContentRef">
       <ListTasks
         :list-id="this.listId"

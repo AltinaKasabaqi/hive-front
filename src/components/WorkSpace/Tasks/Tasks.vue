@@ -1,24 +1,33 @@
 <template>
+  <!-- Task List -->
   <div
     :class="getTaskClass(task)"
     class="expandInput"
     v-for="(task, index) in this.tasks"
     :key="index"
   >
+    <!-- Move task left button -->
     <button @click.stop="moveTaskLeft(task)" class="moveButton expandInput">
       &lt;
     </button>
+
+    <!-- Task details -->
     <div class="TaskDetail">
       <p class="Title" @click="openTaskDetail(task)">{{ task.taskName }}</p>
     </div>
+
+    <!-- Move task right button -->
     <button @click.stop="moveTaskRight(task)" class="moveButton expandInput">
       &gt;
     </button>
+
+    <!-- Members section (empty for now) -->
     <div>
       <div class="members"></div>
     </div>
   </div>
 
+  <!-- Add a new task input -->
   <input
     class="Task TaskAdd"
     type="text"
@@ -27,6 +36,7 @@
     @blur="addTask"
   />
 
+  <!-- Task details popup -->
   <TaskPopup
     @taskDeleted="fetchTasks"
     v-if="showTaskDetail"

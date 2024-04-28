@@ -33,7 +33,6 @@
       >
         <div class="CommentHeader">
           <p>{{ taskComment.userEmail }}</p>
-          <p>{{}}</p>
         </div>
         <p>{{ taskComment.comment }}</p>
       </div>
@@ -233,10 +232,10 @@ export default {
   color: #000;
   width: 100%;
   border-bottom: 1px solid #000;
-
+  display: flex;
+  justify-content: space-between;
   .CommentHeader {
     display: flex;
-    justify-content: space-between;
   }
 }
 * {
@@ -266,13 +265,7 @@ export default {
     flex-direction: column;
     gap: 3rem;
     input {
-      width: 100%; /* Set the width to fill the container */
-      box-sizing: border-box; /* Include padding and border in the element's total width and height */
-      resize: none; /* Disable resizing */
-      overflow: auto; /* Enable vertical scrolling if needed */
-      white-space: normal; /* Allow text wrapping */
-    }
-    input {
+      width: 100%;
       outline: none;
       border: none;
       border-bottom: 1px solid #00000069;
