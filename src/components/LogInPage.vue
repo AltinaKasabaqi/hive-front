@@ -70,6 +70,7 @@ export default {
         .catch((error) => {
           console.error("Gabim në kyçje", error);
           this.error = "User doesn't exist or password is incorrect";
+          
         });
     },
   },
