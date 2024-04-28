@@ -182,6 +182,10 @@ export default {
           userName: data.name,
           userEmail: data.email,
         };
+
+        // Saving for later
+        Cookies.set("userEmail", data.email);
+
       } catch (error) {
         console.error("Error fetching user info:", error.message);
       }

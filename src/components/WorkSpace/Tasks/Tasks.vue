@@ -1,4 +1,5 @@
 <template >
+  <input type="text" placeholder="Add a task" v-model="taskNameInput" @blur="addTask" />
   <div class="Task expandInput" @click="openTaskDetail(task)" v-for="(task, index) in this.tasks" :key="index">
     <p class="Title"> {{ task.taskName }} </p>
     <button @click.stop="moveTaskLeft(task)" class="moveButton">Move Left</button>
@@ -8,7 +9,7 @@
     </div>
   </div>
 
-  <input type="text" v-model="taskNameInput" @blur="addTask" />
+  
 
   <TaskPopup
     @taskDeleted="fetchTasks"
@@ -17,6 +18,9 @@
     :taskName="selectedTask.taskName"
     :taskDescription="selectedTask.taskDescription"
     :taskId="selectedTask.taskId"
+    :endDate="selectedTask.endDate"
+    :startDate="selectedTask.startDate"
+    :listId="selectedTask.listId"
   />
 </template>
 
@@ -47,8 +51,8 @@ export default {
   created() {
     this.fetchTasks();
     this.fetchListsIds();
-    setInterval(this.fetchListsIds, 4850);
-    setInterval(this.fetchTasks, 5000);
+    setInterval(this.fetchListsIds, 1850);
+    setInterval(this.fetchTasks, 2000);
   },
   methods: {
     openTaskDetail(task) {
@@ -152,7 +156,7 @@ export default {
 
 
         const currentIndex = this.listIds.findIndex(item => item.listId === this.listId);
-        console.log(task.listId)
+        //console.log(task.listId)
         let newListId;
 
         if (currentIndex > 0) {
@@ -274,7 +278,12 @@ export default {
 .TaskAdd {
   input {
     width: 100%;
+    justify-content: center;
     text-align: center;
+    input {
+    width: 100%;
+    text-align: center;
+  }
   }
 }
 .TaskAdd:hover {

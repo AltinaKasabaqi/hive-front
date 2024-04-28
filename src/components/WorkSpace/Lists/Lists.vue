@@ -6,9 +6,11 @@
         X
       </p>
     </div>
-    <ListTasks
-    :list-id="this.listId"
-    ></ListTasks>
+    <div class="ListContent">
+      <ListTasks
+      :list-id="this.listId"
+      ></ListTasks>
+    </div>
   </div>
 </template>
 
@@ -152,6 +154,16 @@ export default {
     align-items: flex-start;
     justify-content: space-between;
   }
+}
+
+.ListContent {
+  overflow-y: auto; 
+  max-height: 80vh; 
+  width: 100%;
+}
+
+.ListContent::-webkit-scrollbar {
+  display: none;
 }
 
 .TaskAdd {

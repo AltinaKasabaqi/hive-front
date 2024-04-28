@@ -9,20 +9,25 @@
       />
       <input
         type="text"
-        placeholder="Content"
+        placeholder="Description"
         v-model="localTaskDescription"
+        class="lineInputExpand"
+      />
+      <input
+        type="datetime-local"
+        v-model="localTaskEndDate"
         class="lineInputExpand"
       />
 
       <div class="TaskAssigendMembers"></div>
-      <div class="TaskComments">
+      <div class="TaskComments" v-for="(taskComment, index) in this.taskComments" :key="index">
         <div class="CommentHeader">
-          <p>User1</p>
-          <p>date</p>
+          <p> {{ taskComment.userEmail }}</p>
+          <p> date </p>
         </div>
-        <p>This is one comment</p>
+        <p> {{ taskComment.comment }} </p>
       </div>
-      <input type="text" placeholder="Add a comment" />
+      <input type="text" placeholder="Add a comment" v-model="taskCommentInput" @blur="addTaskComment(taskCommentInput)"/>
 
       <div class="EditWorkPlaceUpdateChanges">
         <button class="WorkPlaceSave expandInput" @click="saveChanges">
@@ -55,13 +60,37 @@ export default {
       type: Number,
       default: 0,
     },
+    taskComment: {
+      type: String,
+      default: "",
+    },
+    listId: {
+      type: Number,
+      default: 0,
+    },
+    endDate: {
+      type: Date,
+    },
+    startDate: {
+      type: Date,
+    },
   },
   data() {
     return {
       localTaskName: this.taskName,
       localTaskDescription: this.taskDescription,
       localTaskId: this.taskId,
+      localTaskComment: this.taskComment,
+      localTaskEndDate: this.endDate,
+      localTaskStartDate: this.startDate,
+      localListId: this.listId,
+      taskComments: [],
+      taskCommentInput: "",
     };
+  },
+  created() {
+    this.fetchComments();
+    console.log("endDate: ", this.localTaskEndDate)
   },
   methods: {
     closePopup(event) {
@@ -69,9 +98,46 @@ export default {
         this.$emit("close");
       }
     },
-    saveTask() {
-      // TODO Implement saving changes logic here
-      this.$emit("close");
+    async saveChanges() {
+      try {
+        const token = Cookies.get("token");
+
+        const newTask = {
+          taskId: this.taskId,
+          taskName: this.localTaskName,
+          taskDescription: this.localTaskDescription,
+          endDate: this.localTaskEndDate,
+          startDate: this.localTaskStartDate,
+          priority: 0,
+          listId: this.localListId,
+          list: {
+            ListName: "",
+            WorkSpace: {
+              User: {
+                email: ""
+              }
+            }
+          },
+
+        };
+
+        console.log("New tASK: ",newTask)
+
+        await axios.put(
+          `http://localhost:5236/task/${this.taskId}`,
+          newTask,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        this.$emit("close");
+      } catch (error) {
+        console.error("Error adding task: ", error);
+      }
     },
     async deleteTask() {
       try {
@@ -98,6 +164,56 @@ export default {
       }
       this.$emit("close");
     },
+    async fetchComments() {
+      const token = Cookies.get("token");
+      const response = await axios.get(
+          `http://localhost:5236/taskcomment/task/${this.localTaskId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+      
+        this.taskComments = response.data;
+    },
+    async addTaskComment(taskCommentInput) {
+      const userEmail = Cookies.get("userEmail");
+
+      const newTaskComment = {
+        taskCommentsId: 0,
+        userEmail: userEmail,
+        taskId: this.taskId,
+        task: {
+          list: {
+            listName: "",
+            workSpace: {
+              user: {
+                email: "",
+              }
+            }
+          }
+        },
+        comment: taskCommentInput
+      };
+
+      const token = Cookies.get("token");
+      await axios.post(
+          `http://localhost:5236/taskcomment`,  
+            newTaskComment,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
+        this.taskCommentInput = "";
+        this.fetchComments();
+    },
   },
 };
 </script>
@@ -118,14 +234,17 @@ export default {
   top: 0;
   right: 0;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-y: hidden;
   .TaskDetailPopup {
     width: 40%;
     background-color: #fff;
     padding: 3rem 4rem;
+    max-height: calc(100% - 100px);
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
     gap: 3rem;
