@@ -145,6 +145,7 @@ export default {
           },
         });
         this.$emit("close");
+        this.$emit("refresh-tasks");
       } catch (error) {
         console.error("Error adding task: ", error);
       }

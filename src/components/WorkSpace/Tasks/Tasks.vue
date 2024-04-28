@@ -37,6 +37,7 @@
     :endDate="selectedTask.endDate"
     :startDate="selectedTask.startDate"
     :listId="selectedTask.listId"
+    @refresh-tasks="forceRerender"
   />
 </template>
 
@@ -256,29 +257,8 @@ export default {
         console.error("Error moving task left:", error);
       }
     },
-    async fetchTasksById(id) {
-      console.log("IDIDIDID: ",id);
-      try {
-        console.log("YYEET");
-        const token = Cookies.get("token");
-
-        const response = await axios.get(
-          `http://localhost:5236/task/list/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        this.tasks = response.data;
-
-        
-        console.log("Response.data: ", response.data)
-      } catch (error) {
-        console.error("Error fetching tasks:", error);
-      }
+    forceRerender() {
+      this.$emit("refresh-tasks");
     },
   },
 };
