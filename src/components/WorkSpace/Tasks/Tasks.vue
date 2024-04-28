@@ -48,11 +48,11 @@ import axios from "axios";
 
 export default {
   name: "ListTasks",
-  props: ['listId', 'forceUpdateKey'],
+  props: ["listId", "forceUpdateKey"],
   components: {
     TaskPopup,
   },
-  emits: ['refreshTasks'],
+  emits: ["refreshTasks"],
   data() {
     return {
       showTaskDetail: false,
@@ -60,13 +60,13 @@ export default {
       taskNameInput: "",
       listIds: [],
       customDate: "2999-04-27",
-      keyIncrement: 0
+      keyIncrement: 0,
     };
   },
   watch: {
     forceUpdateKey() {
       this.keyIncrement++;
-    }
+    },
   },
   created() {
     this.fetchTasks();
@@ -112,7 +112,7 @@ export default {
           }
         );
         this.tasks = response.data;
-        console.log("TRUE RESPONE.DATA: ", response.data)
+        console.log("TRUE RESPONE.DATA: ", response.data);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -279,7 +279,7 @@ button {
 .Task {
   transition: 0.1s;
   cursor: pointer;
-  width: 100%;
+  min-width: 30rem;
   // border-top: 1px solid #fff;
   border: 1px solid #fff;
   padding: 3rem 4rem;
@@ -310,7 +310,7 @@ input {
   border: none;
   outline: none;
   border-bottom: 1px solid #696969;
-  width: 80%;
+  width: 100%;
 }
 input:hover,
 input:focus {

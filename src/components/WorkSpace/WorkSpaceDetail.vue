@@ -2,21 +2,21 @@
   <div class="workSpaceLists">
     <div class="topBarContainer">
       <div class="topBar">
-        <!-- todo take the name as a prop -->
         <h4>{{ localWorkspaceName }}</h4>
         <p @click="openEditPopup" class="clickable">Settings</p>
       </div>
     </div>
     <div class="Lists">
-        <WorkPlaceLists
-          v-for="(WorkPlaceList, index) in lists"
-          :key="`${componentKey}-${index}`"
-          :listName="WorkPlaceList.listName"
-          :listId="WorkPlaceList.listId"
-          @refreshLists="fetchLists"
-          @refresh-tasks="forceRerender">
+      <WorkPlaceLists
+        v-for="(WorkPlaceList, index) in lists"
+        :key="`${componentKey}-${index}`"
+        :listName="WorkPlaceList.listName"
+        :listId="WorkPlaceList.listId"
+        @refreshLists="fetchLists"
+        @refresh-tasks="forceRerender"
+      >
         >
-        </WorkPlaceLists>
+      </WorkPlaceLists>
 
       <div class="List ListAdd">
         <div class="ListName">

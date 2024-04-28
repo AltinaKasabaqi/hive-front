@@ -197,7 +197,6 @@ export default {
 
         // Saving for later
         Cookies.set("userEmail", data.email);
-
       } catch (error) {
         console.error("Error fetching user info:", error.message);
       }
@@ -265,6 +264,21 @@ export default {
     .WorkPlace {
       min-width: 100%;
       padding: 3rem 5%;
+    }
+    .WorkPlaces a {
+      width: calc(50%);
+    }
+  }
+}
+@media only screen and (max-width: 720px) {
+  .WorkPlace {
+    min-width: 100%;
+    .navBar {
+      flex-direction: column;
+      * {
+        text-align: center;
+        width: 100%;
+      }
     }
     .WorkPlaces a {
       width: calc(50%);

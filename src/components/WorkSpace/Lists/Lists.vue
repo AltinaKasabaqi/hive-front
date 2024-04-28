@@ -7,9 +7,11 @@
       </p>
     </div>
     <div class="ListContent" ref="listContentRef">
-      <ListTasks :list-id="this.listId"
-      :key="componentKey"
-      @refresh-tasks="forceRerender">
+      <ListTasks
+        :list-id="this.listId"
+        :key="componentKey"
+        @refresh-tasks="forceRerender"
+      >
       </ListTasks>
     </div>
   </div>
@@ -36,8 +38,7 @@ export default {
       componentKey: 0,
     };
   },
-  mounted() {
-  },
+  mounted() {},
   methods: {
     async updateListName() {
       try {
@@ -114,11 +115,11 @@ export default {
   width: 40rem;
   .ListName {
     padding: 3rem 0px;
-    // width: 80%;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
     padding: 3rem 2rem;
+    width: 80%;
   }
   input {
     transition: 0.2s;
@@ -128,6 +129,7 @@ export default {
     outline: none;
     border-bottom: 1px solid #ffffff73;
     width: 30rem;
+    width: 80%;
   }
 }
 
@@ -146,16 +148,16 @@ input:focus {
   border-bottom: 1px solid #ffffff;
 }
 
-@media only screen and (max-width: 890px) {
-  .workSpaceLists {
-    .topBarContainer {
-      .topBar {
-        padding: 3rem 5%;
-      }
-    }
-  }
-  .List {
-    min-width: 30rem;
-  }
-}
+// @media only screen and (max-width: 890px) {
+//   .workSpaceLists {
+//     .topBarContainer {
+//       .topBar {
+//         padding: 3rem 5%;
+//       }
+//     }
+//   }
+//   .List {
+//     min-width: 30rem;
+//   }
+// }
 </style>
