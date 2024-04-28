@@ -13,7 +13,7 @@
           :listName="WorkPlaceList.listName"
           :listId="WorkPlaceList.listId"
           @refreshLists="fetchLists"
-        > 
+        >
         </WorkPlaceLists>
       </template>
 
@@ -31,13 +31,13 @@
   </div>
   <TaskPopup v-if="showTaskDetail" @close="showTaskDetail = false" />
   <EditWorkPlacePopup
-      v-if="showEditPopup"
-      @close="showEditPopup = false"
-      :workplaceName="localWorkspaceName"
-      :members="members"
-      :workplaceDescription="localWorkspaceDescription"
-      :wId="this.$route.params.wId"
-    />
+    v-if="showEditPopup"
+    @close="showEditPopup = false"
+    :workplaceName="localWorkspaceName"
+    :members="members"
+    :workplaceDescription="localWorkspaceDescription"
+    :wId="this.$route.params.wId"
+  />
 </template>
 
 <script>
@@ -98,7 +98,6 @@ export default {
           listId: List.listId,
           listName: List.listName,
         }));
-
       } catch (error) {
         if (error.response.status === 404) {
           this.lists = [];
@@ -163,7 +162,7 @@ export default {
       } catch (error) {
         console.error("Error adding list: ", error);
       }
-    }, 
+    },
   },
 };
 </script>
@@ -188,14 +187,7 @@ export default {
 }
 
 .Lists {
-  width: 100%;
-  height: 100%;
   display: flex;
-  overflow: scroll;
-  height: 100%;
-  display: flex;
-  overflow-x: auto;
-  overflow-y: auto;
   .removeList {
     transition: 0.1s;
   }
@@ -203,43 +195,7 @@ export default {
     color: rgb(154, 40, 40);
   }
 }
-.List {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: flex;
 
-  min-height: 100%;
-  background-color: #3f3f3f65;
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  width: 40rem; /* Minimum width for each list */
-  height: 100%; /* Occupy full height */
-  flex-shrink: 0; /* Prevent lists from shrinking */
-  background-color: #3f3f3f65;
-  border-left: 1px solid #fff;
-  border-bottom: 1px solid #fff;
-  overflow: hidden; /* Hide overflow content */
-  .ListName {
-    padding: 3rem 0px;
-    width: 80%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-}
-
-.TaskAdd {
-  input {
-    width: 100%;
-    text-align: center;
-  }
-}
-.TaskAdd:hover {
-  input::placeholder {
-    color: #ffffffbd;
-  }
-}
 input {
   transition: 0.2s;
   background: none;
@@ -249,67 +205,24 @@ input {
   border-bottom: 1px solid #ffffff73;
   width: 80%;
 }
+
 input:hover,
 input:focus {
   border-bottom: 1px solid #ffffff;
 }
 .ListAdd {
-  position: relative;
-  // bottom: -50%;
+  padding: 3rem 0px;
+  background-color: #3f3f3f65;
   border-right: 1px solid #fff;
-  .ListName {
-    input {
-      width: 100%;
-    }
-  }
-}
-
-.List {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  justify-content: flex;
-  // width: 10rem;
-  // min-height: 100%;
-  // background-color: #3f3f3f65;
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
-  overflow: hidden;
-  // background: red;
-  .Task:hover {
-    background-color: #ffffff50;
-  }
-  .Task:active {
-    transform: scale(0.95);
-  }
-  .Task {
-    transition: 0.1s;
-    cursor: pointer;
-    width: 100%;
-    border-top: 1px solid #fff;
-    border-bottom: 1px solid #fff;
-    padding: 3rem 4rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2rem;
-    .members {
-      display: flex;
-      gap: 0.6rem;
-      img {
-        background-color: rgb(51, 51, 117);
-        width: 3rem;
-        aspect-ratio: 1/1;
-        border-radius: 100%;
-      }
-    }
-  }
   .ListName {
-    padding: 3rem 0px;
+    margin: 0 auto;
     width: 80%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+    input {
+      color: #fff;
+      width: 100%;
+    }
   }
 }
 

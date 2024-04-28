@@ -1,15 +1,26 @@
-<template >
-  <input type="text" placeholder="Add a task" v-model="taskNameInput" @blur="addTask" />
-  <div class="Task expandInput" @click="openTaskDetail(task)" v-for="(task, index) in this.tasks" :key="index">
-    <p class="Title"> {{ task.taskName }} </p>
-    <button @click.stop="moveTaskLeft(task)" class="moveButton">Move Left</button>
-    <button @click.stop="moveTaskRight(task)" class="moveButton">Move Right</button>
+<template>
+  <div
+    :class="getTaskClass()"
+    class="expandInput"
+    v-for="(task, index) in this.tasks"
+    :key="index"
+  >
+    <button @click.stop="moveTaskLeft(task)" class="moveButton expandInput">
+      &lt;
+    </button>
+    <div class="TaskDetail">
+      <p></p>
+      <p class="Title" @click="openTaskDetail(task)">{{ task.taskName }}</p>
+    </div>
+    <button @click.stop="moveTaskRight(task)" class="moveButton expandInput">
+      &gt;
+    </button>
     <div>
       <div class="members"></div>
     </div>
   </div>
 
-  
+  <input type="text" v-model="taskNameInput" @blur="addTask" />
 
   <TaskPopup
     @taskDeleted="fetchTasks"
@@ -25,7 +36,7 @@
 </template>
 
 <script>
-import TaskPopup from '@/components/popups/TaskPopup/TaskPopup.vue';
+import TaskPopup from "@/components/popups/TaskPopup/TaskPopup.vue";
 import Cookies from "js-cookie";
 import axios from "axios";
 
@@ -35,6 +46,7 @@ export default {
     listId: {
       type: Number,
       required: true,
+      tasks: [], // Your list of tasks
     },
   },
   components: {
@@ -44,8 +56,9 @@ export default {
     return {
       showTaskDetail: false,
       tasks: [],
-      taskNameInput: '',
+      taskNameInput: "",
       listIds: [],
+      customDate: "2999-04-27",
     };
   },
   created() {
@@ -55,11 +68,25 @@ export default {
     setInterval(this.fetchTasks, 2000);
   },
   methods: {
+    getTaskClass() {
+      const today = new Date();
+      const dueDate = new Date(this.customDate);
+
+      if (dueDate < today) {
+        return "Task overdue"; // Apply red styling
+      } else if (
+        dueDate <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
+      ) {
+        return "Task approaching-deadline";
+      } else {
+        return "Task";
+      }
+    },
     openTaskDetail(task) {
       this.showTaskDetail = !this.showTaskDetail;
 
       if (this.showTaskDetail) {
-      this.selectedTask = task;
+        this.selectedTask = task;
       }
     },
     async fetchTasks() {
@@ -67,13 +94,16 @@ export default {
         //console.log("YYEET")
         const token = Cookies.get("token");
 
-        const response = await axios.get(`http://localhost:5236/task/list/${this.listId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:5236/task/list/${this.listId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
         this.tasks = response.data;
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -84,22 +114,21 @@ export default {
         const token = Cookies.get("token");
 
         const newTask = {
-        taskName: this.taskNameInput,
-        taskDescription: "",
-        startDate: new Date().toISOString(),
-        endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-        priority: 0,
-        listId: this.listId,
-        list: {
-          ListName: "",
-          WorkSpace: {
-            User: {
-              email: ""
-            }
-          }
-        },
-
-      };
+          taskName: this.taskNameInput,
+          taskDescription: "",
+          startDate: new Date().toISOString(),
+          endDate: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
+          priority: 0,
+          listId: this.listId,
+          list: {
+            ListName: "",
+            WorkSpace: {
+              User: {
+                email: "",
+              },
+            },
+          },
+        };
 
         const response = await axios.post(
           `http://localhost:5236/task`,
@@ -115,10 +144,10 @@ export default {
 
         if (response.status === 204) {
           this.fetchTasks();
-          this.taskNameInput="";
+          this.taskNameInput = "";
         } else {
           this.fetchTasks();
-          this.taskNameInput="";
+          this.taskNameInput = "";
         }
       } catch (error) {
         console.error("Error adding task: ", error);
@@ -156,28 +185,29 @@ export default {
 
 
         const currentIndex = this.listIds.findIndex(item => item.listId === this.listId);
-        //console.log(task.listId)
+        console.log(task.listId)
         let newListId;
 
         if (currentIndex > 0) {
           const newIndex = currentIndex - 1;
           newListId = this.listIds[newIndex].listId;
-        
-        task.listId = newListId;
 
-        await axios.put(`http://localhost:5236/task/${task.taskId}/move`, 
-          JSON.stringify(newListId),
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          });
+          task.listId = newListId;
+
+          await axios.put(
+            `http://localhost:5236/task/${task.taskId}/move`,
+            JSON.stringify(newListId),
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
           //this.fetchListsIds();
           //this.fetchTasks();
         }
-
       } catch (error) {
         console.error("Error moving task left:", error);
       }
@@ -186,45 +216,50 @@ export default {
       try {
         const token = Cookies.get("token");
 
-        console.log(task.taskId)
+        console.log(task.taskId);
 
-        const currentIndex = this.listIds.findIndex(item => item.listId === this.listId);
+        const currentIndex = this.listIds.findIndex(
+          (item) => item.listId === this.listId
+        );
         let newListId;
 
         if (currentIndex < this.listIds.length - 1) {
           const newIndex = currentIndex + 1;
           newListId = this.listIds[newIndex].listId;
-        
-        
-        await axios.put(`http://localhost:5236/task/${task.taskId}/move`, 
-          JSON.stringify(newListId),
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          });
+
+          await axios.put(
+            `http://localhost:5236/task/${task.taskId}/move`,
+            JSON.stringify(newListId),
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+                Accept: "application/json",
+                "Content-Type": "application/json",
+              },
+            }
+          );
           //this.fetchListsIds();
           //this.fetchTasks();
-
-        } 
+        }
       } catch (error) {
         console.error("Error moving task left:", error);
       }
     },
     async fetchTasksById(id) {
       try {
-        console.log("YYEET")
+        console.log("YYEET");
         const token = Cookies.get("token");
 
-        const response = await axios.get(`http://localhost:5236/task/list/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
+        const response = await axios.get(
+          `http://localhost:5236/task/list/${id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          }
+        );
         this.tasks = [...this.tasks, ...response.data];
       } catch (error) {
         console.error("Error fetching tasks:", error);
@@ -235,10 +270,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// todo hide the scroll bar
-
-.Task:hover {
-  background-color: #ffffff50;
+button {
+  padding: 0;
+  margin: 0;
+  display: block;
+}
+.expandInput button:hover {
+  transform: scale(1.4);
 }
 .Task:active {
   transform: scale(0.95);
@@ -247,12 +285,11 @@ export default {
   transition: 0.1s;
   cursor: pointer;
   width: 100%;
-
   // border-top: 1px solid #fff;
   border: 1px solid #fff;
   padding: 3rem 4rem;
+  gap: 0.5rem;
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 2rem;
 
@@ -278,12 +315,8 @@ export default {
 .TaskAdd {
   input {
     width: 100%;
-    justify-content: center;
     text-align: center;
-    input {
     width: 100%;
-    text-align: center;
-  }
   }
 }
 .TaskAdd:hover {
@@ -291,33 +324,35 @@ export default {
     color: #ffffffbd;
   }
 }
+
+.Task:hover {
+  background-color: #696969;
+}
+
 input {
   transition: 0.2s;
   background: none;
   color: #fff;
   border: none;
   outline: none;
-  border-bottom: 1px solid #ffffff73;
+  border-bottom: 1px solid #696969;
   width: 80%;
 }
 input:hover,
 input:focus {
   border-bottom: 1px solid #ffffff;
 }
-.ListAdd {
-  position: relative;
-  // bottom: -50%;
-  border-right: 1px solid #fff;
-  .ListName {
-    input {
-      width: 100%;
-    }
-  }
+input {
+  border-bottom: 1px solid #fff;
 }
-
-@media only screen and (max-width: 890px) {
-  .List {
-    min-width: 30rem;
-  }
+.Task.overdue {
+  background-color: rgb(143, 49, 49); /* Red for overdue tasks */
+}
+.Task.approaching-deadline {
+  background-color: rgb(
+    140,
+    140,
+    66
+  ); /* Yellow for tasks approaching the deadline */
 }
 </style>
