@@ -1,6 +1,8 @@
 <template >
   <div class="Task expandInput" @click="openTaskDetail(task)" v-for="(task, index) in this.tasks" :key="index">
     <p class="Title"> {{ task.taskName }} </p>
+    <button @click.stop="moveTaskLeft(task)" class="moveButton">Move Left</button>
+    <button @click.stop="moveTaskRight(task)" class="moveButton">Move Right</button>
     <div>
       <div class="members"></div>
     </div>
@@ -38,11 +40,15 @@ export default {
     return {
       showTaskDetail: false,
       tasks: [],
-      taskNameInput: ''
+      taskNameInput: '',
+      listIds: [],
     };
   },
   created() {
     this.fetchTasks();
+    this.fetchListsIds();
+    setInterval(this.fetchListsIds, 4850);
+    setInterval(this.fetchTasks, 5000);
   },
   methods: {
     openTaskDetail(task) {
@@ -54,6 +60,7 @@ export default {
     },
     async fetchTasks() {
       try {
+        //console.log("YYEET")
         const token = Cookies.get("token");
 
         const response = await axios.get(`http://localhost:5236/task/list/${this.listId}`, {
@@ -111,6 +118,112 @@ export default {
         }
       } catch (error) {
         console.error("Error adding task: ", error);
+      }
+    },
+    async fetchListsIds() {
+      try {
+        const token = Cookies.get("token");
+        const wId = this.$route.params.wId;
+        const response = await axios.get(
+          `http://localhost:5236/list/workspace/${wId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+            },
+          }
+        );
+        const data = response.data;
+        this.listIds = data.map((List) => ({
+          listId: List.listId,
+        }));
+        //console.log("lists: ", this.listIds)
+      } catch (error) {
+        if (error.response.status === 404) {
+          this.lists = [];
+        } else {
+          console.error("Error fetching lists:", error.message);
+        }
+      }
+    },
+    async moveTaskLeft(task) {
+      try {
+        const token = Cookies.get("token");
+
+
+        const currentIndex = this.listIds.findIndex(item => item.listId === this.listId);
+        console.log(task.listId)
+        let newListId;
+
+        if (currentIndex > 0) {
+          const newIndex = currentIndex - 1;
+          newListId = this.listIds[newIndex].listId;
+        
+        task.listId = newListId;
+
+        await axios.put(`http://localhost:5236/task/${task.taskId}/move`, 
+          JSON.stringify(newListId),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
+          //this.fetchListsIds();
+          //this.fetchTasks();
+        }
+
+      } catch (error) {
+        console.error("Error moving task left:", error);
+      }
+    },
+    async moveTaskRight(task) {
+      try {
+        const token = Cookies.get("token");
+
+        console.log(task.taskId)
+
+        const currentIndex = this.listIds.findIndex(item => item.listId === this.listId);
+        let newListId;
+
+        if (currentIndex < this.listIds.length - 1) {
+          const newIndex = currentIndex + 1;
+          newListId = this.listIds[newIndex].listId;
+        
+        
+        await axios.put(`http://localhost:5236/task/${task.taskId}/move`, 
+          JSON.stringify(newListId),
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
+          //this.fetchListsIds();
+          //this.fetchTasks();
+
+        } 
+      } catch (error) {
+        console.error("Error moving task left:", error);
+      }
+    },
+    async fetchTasksById(id) {
+      try {
+        console.log("YYEET")
+        const token = Cookies.get("token");
+
+        const response = await axios.get(`http://localhost:5236/task/list/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
+        this.tasks = [...this.tasks, ...response.data];
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
       }
     },
   },
