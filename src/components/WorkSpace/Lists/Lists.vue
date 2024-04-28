@@ -7,9 +7,7 @@
       </p>
     </div>
     <div class="ListContent">
-      <ListTasks
-      :list-id="this.listId"
-      ></ListTasks>
+      <ListTasks :list-id="this.listId"></ListTasks>
     </div>
   </div>
 </template>
@@ -101,38 +99,39 @@ export default {
   align-items: center;
   flex-direction: column;
   justify-content: flex;
-  width: 40rem;
   background-color: #3f3f3f65;
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
+  width: 40rem;
   .ListName {
     padding: 3rem 0px;
-    width: 80%;
+    // width: 80%;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
+    padding: 3rem 2rem;
+  }
+  input {
+    transition: 0.2s;
+    background: none;
+    color: #fff;
+    border: none;
+    outline: none;
+    border-bottom: 1px solid #ffffff73;
+    width: 30rem;
   }
 }
 
 .ListContent {
-  overflow-y: auto; 
-  max-height: 80vh; 
-  width: 100%;
+  overflow-y: auto;
+  max-height: 80vh;
+  // width: 100%;
 }
 
 .ListContent::-webkit-scrollbar {
   display: none;
 }
 
-input {
-  transition: 0.2s;
-  background: none;
-  color: #fff;
-  border: none;
-  outline: none;
-  border-bottom: 1px solid #ffffff73;
-  width: 80%;
-}
 input:hover,
 input:focus {
   border-bottom: 1px solid #ffffff;

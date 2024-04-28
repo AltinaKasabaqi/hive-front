@@ -20,7 +20,13 @@
     </div>
   </div>
 
-  <input type="text" v-model="taskNameInput" @blur="addTask" />
+  <input
+    class="Task TaskAdd"
+    type="text"
+    v-model="taskNameInput"
+    placeholder="+ Add a task"
+    @blur="addTask"
+  />
 
   <TaskPopup
     @taskDeleted="fetchTasks"
@@ -111,6 +117,9 @@ export default {
     },
     async addTask() {
       try {
+        if (!this.taskNameInput) {
+          return;
+        }
         const token = Cookies.get("token");
 
         const newTask = {
@@ -183,9 +192,10 @@ export default {
       try {
         const token = Cookies.get("token");
 
-
-        const currentIndex = this.listIds.findIndex(item => item.listId === this.listId);
-        console.log(task.listId)
+        const currentIndex = this.listIds.findIndex(
+          (item) => item.listId === this.listId
+        );
+        console.log(task.listId);
         let newListId;
 
         if (currentIndex > 0) {
@@ -291,37 +301,16 @@ button {
   gap: 0.5rem;
   display: flex;
   align-items: center;
-  gap: 2rem;
-
-  .members {
-    display: flex;
-    gap: 0.6rem;
-    img {
-      background-color: rgb(51, 51, 117);
-      width: 3rem;
-      aspect-ratio: 1/1;
-      border-radius: 100%;
-    }
-  }
-  .ListName {
-    padding: 3rem 0px;
-    width: 80%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-}
-
-.TaskAdd {
-  input {
-    width: 100%;
+  justify-content: space-between;
+  .TaskDetail {
     text-align: center;
     width: 100%;
   }
-}
-.TaskAdd:hover {
-  input::placeholder {
-    color: #ffffffbd;
+  .moveButton {
+    background: none;
+    color: #fff;
+    border: none;
+    outline: none;
   }
 }
 

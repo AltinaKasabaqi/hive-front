@@ -20,14 +20,23 @@
       />
 
       <div class="TaskAssigendMembers"></div>
-      <div class="TaskComments" v-for="(taskComment, index) in this.taskComments" :key="index">
+      <div
+        class="TaskComments"
+        v-for="(taskComment, index) in this.taskComments"
+        :key="index"
+      >
         <div class="CommentHeader">
-          <p> {{ taskComment.userEmail }}</p>
-          <p> date </p>
+          <p>{{ taskComment.userEmail }}</p>
+          <p>{{}}</p>
         </div>
-        <p> {{ taskComment.comment }} </p>
+        <p>{{ taskComment.comment }}</p>
       </div>
-      <input type="text" placeholder="Add a comment" v-model="taskCommentInput" @blur="addTaskComment(taskCommentInput)"/>
+      <input
+        type="text"
+        placeholder="Add a comment"
+        v-model="taskCommentInput"
+        @blur="addTaskComment(taskCommentInput)"
+      />
 
       <div class="EditWorkPlaceUpdateChanges">
         <button class="WorkPlaceSave expandInput" @click="saveChanges">
@@ -90,7 +99,7 @@ export default {
   },
   created() {
     this.fetchComments();
-    console.log("endDate: ", this.localTaskEndDate)
+    console.log("endDate: ", this.localTaskEndDate);
   },
   methods: {
     closePopup(event) {
@@ -114,26 +123,21 @@ export default {
             ListName: "",
             WorkSpace: {
               User: {
-                email: ""
-              }
-            }
+                email: "",
+              },
+            },
           },
-
         };
 
-        console.log("New tASK: ",newTask)
+        console.log("New tASK: ", newTask);
 
-        await axios.put(
-          `http://localhost:5236/task/${this.taskId}`,
-          newTask,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
+        await axios.put(`http://localhost:5236/task/${this.taskId}`, newTask, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        });
         this.$emit("close");
       } catch (error) {
         console.error("Error adding task: ", error);
@@ -167,19 +171,22 @@ export default {
     async fetchComments() {
       const token = Cookies.get("token");
       const response = await axios.get(
-          `http://localhost:5236/taskcomment/task/${this.localTaskId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-      
-        this.taskComments = response.data;
+        `http://localhost:5236/taskcomment/task/${this.localTaskId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      this.taskComments = response.data;
     },
     async addTaskComment(taskCommentInput) {
+      if (!taskCommentInput) {
+        return;
+      }
       const userEmail = Cookies.get("userEmail");
 
       const newTaskComment = {
@@ -192,27 +199,23 @@ export default {
             workSpace: {
               user: {
                 email: "",
-              }
-            }
-          }
+              },
+            },
+          },
         },
-        comment: taskCommentInput
+        comment: taskCommentInput,
       };
 
       const token = Cookies.get("token");
-      await axios.post(
-          `http://localhost:5236/taskcomment`,  
-            newTaskComment,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          }
-        );
-        this.taskCommentInput = "";
-        this.fetchComments();
+      await axios.post(`http://localhost:5236/taskcomment`, newTaskComment, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      });
+      this.taskCommentInput = "";
+      this.fetchComments();
     },
   },
 };
@@ -222,6 +225,7 @@ export default {
 .TaskComments {
   color: #000;
   width: 100%;
+  border-bottom: 1px solid #000;
   .CommentHeader {
     display: flex;
     justify-content: space-between;

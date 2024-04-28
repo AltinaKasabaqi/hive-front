@@ -129,6 +129,9 @@ export default {
     },
     async addList(listInput) {
       try {
+        if (!listInput) {
+          return;
+        }
         const wId = this.$route.params.wId;
         const token = Cookies.get("token");
         const response = await axios.post(
@@ -188,6 +191,8 @@ export default {
 
 .Lists {
   display: flex;
+  overflow: auto;
+  min-height: 100vh;
   .removeList {
     transition: 0.1s;
   }
@@ -203,7 +208,6 @@ input {
   border: none;
   outline: none;
   border-bottom: 1px solid #ffffff73;
-  width: 80%;
 }
 
 input:hover,
@@ -211,17 +215,19 @@ input:focus {
   border-bottom: 1px solid #ffffff;
 }
 .ListAdd {
-  padding: 3rem 0px;
+  // padding: 3rem 0px;
   background-color: #3f3f3f65;
   border-right: 1px solid #fff;
   border-left: 1px solid #fff;
   border-bottom: 1px solid #fff;
   .ListName {
+    min-width: 30rem;
+    padding: 3rem 2rem;
     margin: 0 auto;
-    width: 80%;
+    min-width: 80%;
     input {
       color: #fff;
-      width: 100%;
+      width: 30rem;
     }
   }
 }
