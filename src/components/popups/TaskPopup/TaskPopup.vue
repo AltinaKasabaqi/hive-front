@@ -1,5 +1,9 @@
 <template>
-  <div class="TaskDetailPopupContainer" @click="closePopup">
+  <div
+    class="TaskDetailPopupContainer"
+    id="TaskDetailPopupContainer"
+    @click="closePopup"
+  >
     <div class="TaskDetailPopup" @click.stop>
       <input
         type="text"
@@ -11,7 +15,7 @@
         type="text"
         placeholder="Description"
         v-model="localTaskDescription"
-        class="lineInputExpand"
+        class="lineInputExpand TaskDeatilText"
       />
       <input
         type="datetime-local"
@@ -20,6 +24,8 @@
       />
 
       <div class="TaskAssigendMembers"></div>
+      <p>Comments</p>
+
       <div
         class="TaskComments"
         v-for="(taskComment, index) in this.taskComments"
@@ -226,12 +232,17 @@ export default {
   color: #000;
   width: 100%;
   border-bottom: 1px solid #000;
+
   .CommentHeader {
     display: flex;
     justify-content: space-between;
   }
 }
+* {
+  font-size: 1.5rem;
+}
 .TaskDetailPopupContainer {
+  color: #000;
   z-index: 99;
   background-color: #00000054;
   position: fixed;
@@ -243,6 +254,7 @@ export default {
   align-items: center;
   justify-content: center;
   overflow-y: hidden;
+
   .TaskDetailPopup {
     width: 40%;
     background-color: #fff;
@@ -253,6 +265,13 @@ export default {
     flex-direction: column;
     gap: 3rem;
     input {
+      width: 100%; /* Set the width to fill the container */
+      box-sizing: border-box; /* Include padding and border in the element's total width and height */
+      resize: none; /* Disable resizing */
+      overflow: auto; /* Enable vertical scrolling if needed */
+      white-space: normal; /* Allow text wrapping */
+    }
+    input {
       outline: none;
       border: none;
       border-bottom: 1px solid #00000069;
@@ -262,7 +281,7 @@ export default {
   button {
     padding: 1rem 2rem;
     border: none;
-    font-size: var(--font-M);
+    font-size: var(--font-S);
   }
   .EditWorkPlaceUpdateChanges {
     display: flex;

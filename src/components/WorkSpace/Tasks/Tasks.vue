@@ -9,7 +9,6 @@
       &lt;
     </button>
     <div class="TaskDetail">
-      <p></p>
       <p class="Title" @click="openTaskDetail(task)">{{ task.taskName }}</p>
     </div>
     <button @click.stop="moveTaskRight(task)" class="moveButton expandInput">
