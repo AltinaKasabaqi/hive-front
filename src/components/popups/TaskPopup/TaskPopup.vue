@@ -1,19 +1,29 @@
 <template>
   <div class="TaskDetailPopupContainer" @click="closePopup">
     <div class="TaskDetailPopup" @click.stop>
-      <!-- todo taking the value from the objects in api -->
-      <input 
-        type="text" 
-        placeholder="Title" 
-        v-model="localTaskName" 
-        class="lineInputExpand" />
+      <input
+        type="text"
+        placeholder="Title"
+        v-model="localTaskName"
+        class="lineInputExpand"
+      />
       <input
         type="text"
         placeholder="Content"
         v-model="localTaskDescription"
         class="lineInputExpand"
       />
-      <!-- todo add options to select members -->
+
+      <div class="TaskAssigendMembers"></div>
+      <div class="TaskComments">
+        <div class="CommentHeader">
+          <p>User1</p>
+          <p>date</p>
+        </div>
+        <p>This is one comment</p>
+      </div>
+      <input type="text" placeholder="Add a comment" />
+
       <div class="EditWorkPlaceUpdateChanges">
         <button class="WorkPlaceSave expandInput" @click="saveChanges">
           Save
@@ -35,22 +45,22 @@ export default {
   props: {
     taskName: {
       type: String,
-      default: ""
+      default: "",
     },
     taskDescription: {
       type: String,
-      default: ""
+      default: "",
     },
     taskId: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   data() {
     return {
       localTaskName: this.taskName,
       localTaskDescription: this.taskDescription,
-      localTaskId: this.taskId
+      localTaskId: this.taskId,
     };
   },
   methods: {
@@ -93,7 +103,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.TaskComments {
+  color: #000;
+  width: 100%;
+  .CommentHeader {
+    display: flex;
+    justify-content: space-between;
+  }
+}
 .TaskDetailPopupContainer {
+  z-index: 99;
   background-color: #00000054;
   position: fixed;
   top: 0;
@@ -152,6 +171,13 @@ export default {
     input,
     button {
       font-size: var(--font-S);
+    }
+  }
+}
+@media only screen and (max-width: 280px) {
+  .TaskComments {
+    .CommentHeader {
+      flex-direction: column;
     }
   }
 }
