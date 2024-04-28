@@ -1,6 +1,6 @@
 <template>
   <div
-    :class="getTaskClass()"
+    :class="getTaskClass(task)"
     class="expandInput"
     v-for="(task, index) in this.tasks"
     :key="index"
@@ -74,9 +74,9 @@ export default {
     //setInterval(this.fetchTasks, 2000);
   },
   methods: {
-    getTaskClass() {
+    getTaskClass(task) {
       const today = new Date();
-      const dueDate = new Date(this.customDate);
+      const dueDate = new Date(task.endDate);
 
       if (dueDate < today) {
         return "Task overdue"; // Apply red styling
