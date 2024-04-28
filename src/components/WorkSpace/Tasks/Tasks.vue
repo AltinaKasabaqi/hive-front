@@ -47,16 +47,11 @@ import axios from "axios";
 
 export default {
   name: "ListTasks",
-  props: {
-    listId: {
-      type: Number,
-      required: true,
-      tasks: [], // Your list of tasks
-    },
-  },
+  props: ['listId', 'forceUpdateKey'],
   components: {
     TaskPopup,
   },
+  emits: ['refreshTasks'],
   data() {
     return {
       showTaskDetail: false,
@@ -64,13 +59,19 @@ export default {
       taskNameInput: "",
       listIds: [],
       customDate: "2999-04-27",
+      keyIncrement: 0
     };
+  },
+  watch: {
+    forceUpdateKey() {
+      this.keyIncrement++;
+    }
   },
   created() {
     this.fetchTasks();
     this.fetchListsIds();
-    setInterval(this.fetchListsIds, 1850);
-    setInterval(this.fetchTasks, 2000);
+    //setInterval(this.fetchListsIds, 1850);
+    //setInterval(this.fetchTasks, 2000);
   },
   methods: {
     getTaskClass() {
@@ -110,6 +111,7 @@ export default {
           }
         );
         this.tasks = response.data;
+        console.log("TRUE RESPONE.DATA: ", response.data)
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }
@@ -204,8 +206,8 @@ export default {
           task.listId = newListId;
 
           await axios.put(
-            `http://localhost:5236/task/${task.taskId}/move`,
-            JSON.stringify(newListId),
+            `http://localhost:5236/task/${task.taskId}/move/${newListId}`,
+            null,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -215,7 +217,7 @@ export default {
             }
           );
           //this.fetchListsIds();
-          //this.fetchTasks();
+          this.$emit("refresh-tasks");
         }
       } catch (error) {
         console.error("Error moving task left:", error);
@@ -237,8 +239,8 @@ export default {
           newListId = this.listIds[newIndex].listId;
 
           await axios.put(
-            `http://localhost:5236/task/${task.taskId}/move`,
-            JSON.stringify(newListId),
+            `http://localhost:5236/task/${task.taskId}/move/${newListId}`,
+            null,
             {
               headers: {
                 Authorization: `Bearer ${token}`,
@@ -247,14 +249,15 @@ export default {
               },
             }
           );
-          //this.fetchListsIds();
           //this.fetchTasks();
+          this.$emit("refresh-tasks");
         }
       } catch (error) {
         console.error("Error moving task left:", error);
       }
     },
     async fetchTasksById(id) {
+      console.log("IDIDIDID: ",id);
       try {
         console.log("YYEET");
         const token = Cookies.get("token");
@@ -269,7 +272,10 @@ export default {
             },
           }
         );
-        this.tasks = [...this.tasks, ...response.data];
+        this.tasks = response.data;
+
+        
+        console.log("Response.data: ", response.data)
       } catch (error) {
         console.error("Error fetching tasks:", error);
       }

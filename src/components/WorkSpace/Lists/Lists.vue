@@ -6,8 +6,11 @@
         X
       </p>
     </div>
-    <div class="ListContent">
-      <ListTasks :list-id="this.listId"></ListTasks>
+    <div class="ListContent" ref="listContentRef">
+      <ListTasks :list-id="this.listId"
+      :key="componentKey"
+      @refresh-tasks="forceRerender">
+      </ListTasks>
     </div>
   </div>
 </template>
@@ -30,7 +33,10 @@ export default {
     return {
       listNameInput: this.listName,
       listIdInput: this.listId,
+      componentKey: 0,
     };
+  },
+  mounted() {
   },
   methods: {
     async updateListName() {
@@ -88,6 +94,9 @@ export default {
       } catch (error) {
         console.error("Error deleteing list: ", error);
       }
+    },
+    forceRerender() {
+      this.$emit("refresh-tasks");
     },
   },
 };

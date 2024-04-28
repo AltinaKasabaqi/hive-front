@@ -8,14 +8,15 @@
       </div>
     </div>
     <div class="Lists">
-      <template v-for="(WorkPlaceList, index) in lists" :key="index">
         <WorkPlaceLists
+          v-for="(WorkPlaceList, index) in lists"
+          :key="`${componentKey}-${index}`"
           :listName="WorkPlaceList.listName"
           :listId="WorkPlaceList.listId"
           @refreshLists="fetchLists"
+          @refresh-tasks="forceRerender">
         >
         </WorkPlaceLists>
-      </template>
 
       <div class="List ListAdd">
         <div class="ListName">
@@ -66,6 +67,7 @@ export default {
       localWorkspaceName: "",
       localWorkspaceDescription: "",
       listInput: "",
+      componentKey: 0,
     };
   },
   created() {
@@ -165,6 +167,9 @@ export default {
       } catch (error) {
         console.error("Error adding list: ", error);
       }
+    },
+    forceRerender() {
+      this.componentKey += 1;
     },
   },
 };
