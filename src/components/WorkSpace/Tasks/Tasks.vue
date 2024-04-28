@@ -1,6 +1,7 @@
 <template>
   <div
-    class="Task expandInput"
+    :class="getTaskClass()"
+    class="expandInput"
     v-for="(task, index) in this.tasks"
     :key="index"
   >
@@ -8,6 +9,7 @@
       &lt;
     </button>
     <div class="TaskDetail">
+      <p></p>
       <p class="Title" @click="openTaskDetail(task)">{{ task.taskName }}</p>
     </div>
     <button @click.stop="moveTaskRight(task)" class="moveButton expandInput">
@@ -47,6 +49,7 @@ export default {
     listId: {
       type: Number,
       required: true,
+      tasks: [], // Your list of tasks
     },
   },
   components: {
@@ -58,6 +61,7 @@ export default {
       tasks: [],
       taskNameInput: "",
       listIds: [],
+      customDate: "2999-04-27",
     };
   },
   created() {
@@ -67,6 +71,20 @@ export default {
     setInterval(this.fetchTasks, 5000);
   },
   methods: {
+    getTaskClass() {
+      const today = new Date();
+      const dueDate = new Date(this.customDate);
+
+      if (dueDate < today) {
+        return "Task overdue"; // Apply red styling
+      } else if (
+        dueDate <= new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
+      ) {
+        return "Task approaching-deadline";
+      } else {
+        return "Task";
+      }
+    },
     openTaskDetail(task) {
       this.showTaskDetail = !this.showTaskDetail;
 
@@ -309,5 +327,15 @@ input:focus {
 }
 input {
   border-bottom: 1px solid #fff;
+}
+.Task.overdue {
+  background-color: rgb(143, 49, 49); /* Red for overdue tasks */
+}
+.Task.approaching-deadline {
+  background-color: rgb(
+    140,
+    140,
+    66
+  ); /* Yellow for tasks approaching the deadline */
 }
 </style>
