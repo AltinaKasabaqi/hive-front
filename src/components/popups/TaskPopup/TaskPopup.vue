@@ -24,6 +24,20 @@
       />
 
       <div class="TaskAssigendMembers"></div>
+      <div class="TaskInvitePoeple">
+        <div class="InvitePeopleContainer">
+          <input type="text" placeholder="Add people to task" />
+          <button class="WorkPlaceSave expandInput" @click="saveChanges">
+            Add
+          </button>
+        </div>
+        <div class="ListOfAssignedMembers">
+          <p>User 1</p>
+          <p>User 1</p>
+          <p>User 1</p>
+          <p>User 1</p>
+        </div>
+      </div>
       <p>Comments</p>
 
       <div
@@ -254,7 +268,6 @@ export default {
   align-items: center;
   justify-content: center;
   overflow-y: hidden;
-
   .TaskDetailPopup {
     width: 40%;
     background-color: #fff;
@@ -287,6 +300,21 @@ export default {
     .WorkPlaceDelete {
       cursor: pointer;
       background-color: rgb(224, 75, 75);
+    }
+  }
+  .TaskInvitePoeple {
+    .InvitePeopleContainer {
+      display: flex;
+      justify-content: space-between;
+    }
+    .ListOfAssignedMembers {
+      margin: 2rem 0;
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+    }
+    input {
+      width: 80%;
     }
   }
 }
